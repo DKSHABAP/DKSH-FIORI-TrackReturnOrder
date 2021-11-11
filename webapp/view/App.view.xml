@@ -1,0 +1,4 @@
+<mvc:View controllerName="dksh.connectclient.TrackReturnOrder.controller.App" displayBlock="true" height="100%" xmlns="sap.m"
+	xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc">
+	<SplitApp id="app"/>
+</mvc:View>

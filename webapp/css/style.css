@@ -1,0 +1,40 @@
+/* Enter your custom styles here */
+
+.summaryCls .sapUiFormTitleH4 {
+    font-size: .875rem;
+    font-weight: 800;
+}
+
+.sapUiSizeCompact .sapUiFormContainerTitle>.sapUiFormTitle {
+    height: 0rem !important;
+    line-height: 1rem;
+}
+
+.sapMPanelContent {
+    padding: 0;
+}
+
+.sapUiFormResGrid>div {
+    padding: 0 !important;
+    box-sizing: border-box;
+}
+
+.sapMIBar-CTX .sapMTitle {
+    color: black !important;
+    text-shadow: none;
+}
+
+.blurText {
+    filter: blur(5px);
+    /*color: transparent;*/
+    /*text-shadow: 0PX 0 5px rgb(79 76 76 / 50%);*/
+    /*text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);*/
+}
+
+[data-blurItemLevel="B"] {
+    -webkit-filter: blur(8px);
+    -moz-filter: blur(8px);
+    -ms-filter: blur(8px);
+    -o-filter: blur(8px);
+    filter: blur(8px);
+}

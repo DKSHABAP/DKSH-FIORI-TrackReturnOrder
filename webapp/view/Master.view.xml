@@ -1,0 +1,52 @@
+<mvc:View controllerName="dksh.connectclient.TrackReturnOrder.controller.Master" xmlns="sap.m" xmlns:semantic="sap.f.semantic"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:footerbar="sap.ushell.ui.footerbar">
+	<Page id="ID_MAST_PAGE" class="sapUiSizeCompact" showNavButton="true" navButtonPress="handleBack" title="">
+		<subHeader>
+			<Bar>
+				<contentMiddle>
+					<SearchField id="ID_SERCH_FLD" showRefreshButton="true" refreshButtonTooltip="refresh" search="onSearchMasterList" tooltip="Search"></SearchField>
+				</contentMiddle>
+			</Bar>
+		</subHeader>
+		<content>
+			<List id="ID_MASTER_LIST" class="sapUiSizeCompact listSelColor" growing="true" growingThreshold="20" growingScrollToLoad="true"
+				items="{masterDataModel>/results}" mode="SingleSelectMaster" updateFinished="updateFinished" visible="true" inset="false"
+				selectionChange="handleItemPressed" width="100%" modeAnimationOn="true" includeItemInSelection="false" showSeparators="All"
+				rememberSelections="true" backgroundDesign="Solid">
+				<items>
+					<CustomListItem>
+						<HBox>
+							<core:Icon size="2rem" src="{path:'masterDataModel>HeaderStatus',formatter:'.formatter.StatusHandleIcon'}" color="#b00"
+								class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom"/>
+							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
+								<!--<Label text="{path:'masterDataModel>matNo',formatter:'.formatter.statusdforDetailPage'}" design="Bold"/>-->
+								<HBox>
+									<Label text="{masterDataModel>HeaderStatusDesc}" design="Bold"/>
+								</HBox>
+								<Label text="{masterDataModel>ConditionGroup5Desc}" design="Bold"/>
+								<Text text="{masterDataModel>ReturnOrderNumber} {masterDataModel>TotalAmount}({masterDataModel>Currency})" class="sapUiTinyMarginBegin"
+									visible="{path:'masterDataModel>Blur',formatter:'.formatter.blurNValue'}"/>
+								<HBox visible="{path:'masterDataModel>Blur',formatter:'.formatter.blurValue'}" class="sapUiTinyMarginBegin">
+									<Text text="{masterDataModel>ReturnOrderNumber}"/>
+									<Text text="@@@@ @@@@" class="blurText"/>
+								</HBox>
+								<Text text="{masterDataModel>ReturnReasonDesc}" class="sapUiTinyMarginBegin"/>
+								<Text text="Ref. Invoice No.: {masterDataModel>RefInvoice}" class="sapUiTinyMarginBegin"/>
+								<Text text="{masterDataModel>CustomerCode} - {masterDataModel>CustomerName}" tooltip="{masterDataModel>CustId} - {masterDataModel>CustName}"
+									class="sapUiTinyMarginBegin"/>
+								<Text text="Created on: {masterDataModel>CreatedDateTime}" class="sapUiTinyMarginBegin"></Text>
+								<Text text="{masterDataModel>LinkedExchangeOrder}" class="sapUiTinyMarginBegin"></Text>
+							</VBox>
+						</HBox>
+					</CustomListItem>
+				</items>
+			</List>
+		</content>
+		<footer>
+			<Toolbar id="masterToolbar">
+				<ToolbarSpacer></ToolbarSpacer>
+				<Button icon="sap-icon://filter" press="handlefilter" tooltip="{i18n>filterMasterList}" id="ID_BTN_FILTER"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

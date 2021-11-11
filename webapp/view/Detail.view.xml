@@ -1,0 +1,505 @@
+<mvc:View controllerName="dksh.connectclient.TrackReturnOrder.controller.Detail" xmlns="sap.m" xmlns:semantic="sap.f.semantic"
+	xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:t="sap.suite.ui.commons" xmlns:mvc="sap.ui.core.mvc" xmlns:rich="sap.ui.richtexteditor"
+	xmlns:u="sap.ui.table" xmlns:core="sap.ui.core" xmlns:comm="sap.suite.ui.commons" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Page id="detailPage" showNavButton="{device>/system/phone}" navButtonPress="onNavBackMaster" enableScrolling="true" title=""
+		class="sapUiSizeCompact">
+		<!--Button for full screen-->
+		<headerContent>
+			<ToggleButton icon="sap-icon://full-screen" press="onFullscreen" tooltip="{i18n>fullScreentooltip}"
+				visible="{path:'device>/system/phone',formatter:'.formatter.basedDeviceToggeleShow'}" id="ID_BTN_FULL_SCR"/>
+		</headerContent>
+		<content>
+			<!--Header details-->
+			<Table id="ID_OBJ_HDR" fixedLayout="false" inset="false" visible="true">
+				<columns>
+					<Column minScreenWidth="Tablet" demandPopin="true" width="70%" popinDisplay="Inline"/>
+					<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Left" width="30%" popinDisplay="Inline"/>
+				</columns>
+				<ColumnListItem>
+					<VBox>
+						<HBox>
+							<Label design="Bold" text="Return Order:"/>
+							<Text text="{detailsDataModel>/results/navToReturnHeader/results/0/ReturnOrderNumber}" class="sapUiTinyMarginBegin"/>
+						</HBox>
+						<HBox>
+							<Label design="Bold" text="{i18n>custNameDetPagHdr}" tooltip="{i18n>custNameTooltipAll}"/>
+							<Text
+								text="{parts:['detailsDataModel>/results/navToReturnHeader/results/0/CustomerName','detailsDataModel>/results/navToReturnHeader/results/0/CustomerCode'],formatter:'.formatter.f4ValueBind'}"
+								class="sapUiTinyMarginBegin"/>
+						</HBox>
+						<HBox>
+							<Label design="Bold" text="Return Reason:" tooltip="{i18n>custNameTooltipAll}"/>
+							<Text text="{detailsDataModel>/results/navToReturnHeader/results/0/ReturnReasonDesc}" class="sapUiTinyMarginBegin"/>
+						</HBox>
+					</VBox>
+					<VBox>
+						<HBox>
+							<Label design="Bold" text="{i18n>statusDetPagHdr}"/>
+							<Text text="{detailsDataModel>/results/navToReturnHeader/results/0/HeaderStatusDesc}" class="sapUiTinyMarginBegin"/>
+						</HBox>
+						<HBox>
+							<Label design="Bold" text="{i18n>createdOnDetPagHdr}"/>
+							<Text text="{detailsDataModel>/results/navToReturnHeader/results/0/CreatedDateTime}" class="sapUiTinyMarginBegin"/>
+						</HBox>
+						<HBox>
+							<Label design="Bold" text=""/>
+							<Text text="" class="sapUiTinyMarginBegin"/>
+						</HBox>
+					</VBox>
+				</ColumnListItem>
+			</Table>
+			<IconTabBar id="ID_TRCA_ICON_TAB" expandable="false" expanded="true" select="handleIconTabSelect">
+				<items>
+					<!--for Tracking Details-->
+					<IconTabFilter key="TrackKey" text="{i18n>trackingDetailsIconTab}" tooltip="{i18n>trackingDetailsIconTab}">
+						<t:Timeline axisOrientation="Vertical" showFilterBar="false" id="idTimeline" enableBackendFilter="false" enableDoubleSided="false"
+							growingThreshold="0" sortOldestFirst="true" content="{trackingModel>/returns}" enableScroll="false">
+							<t:content>
+								<t:TimelineItem userName="{trackingModel>GroupStatusText}"
+									status="{parts:['trackingModel>HdrStatCode','trackingModel>GroupStatusCode'],formatter:'.formatter.handleColor'}"
+									icon="{parts:['trackingModel>HdrStatCode','trackingModel>GroupStatusCode'],formatter:'.formatter.statusHandleRet'}">
+									<t:embeddedControl>
+										<List showSeparators="None">
+											<items>
+												<CustomListItem>
+													<VBox>
+														<Label text="{i18n>statusDetPagHdr} {path:'trackingModel>HdrStatDesc',formatter:'.formatter.statusdforDetailPage'}" design="Bold"></Label>
+														<Text text="RO Date:{parts:['trackingModel>OrderDate','trackingModel>OrderTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>OrderDate'],formatter:'.formatter.visibleRODate'}"/>
+														<Text text="Prep. in progress:{parts:['trackingModel>PickupDate','trackingModel>PickupTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>PickupDate'],formatter:'.formatter.visibleRPDate'}"/>
+														<Text text="PGR date:{parts:['trackingModel>PgrDate','trackingModel>PgrTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>PgrDate'],formatter:'.formatter.visibleRPDate'}"/>
+														<Text
+															text="Cancellation date:{parts:['trackingModel>CancellationDate','trackingModel>CancellationTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>CancellationDate'],formatter:'.formatter.visibleRPDate'}"/>
+														<Text text="Approved by:{parts:['trackingModel>ApprovedBy','trackingModel>ApprovedAt'],formatter:'.formatter.valueDateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>ApprovedBy'],formatter:'.formatter.visibleRODate'}"/>
+														<Text text="Rejected by:{parts:['trackingModel>RejectedBy','trackingModel>RejectedAt'],formatter:'.formatter.valueDateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>RejectedBy'],formatter:'.formatter.visibleRODate'}"/>
+														<Text text="CN date:{parts:['trackingModel>CnDate','trackingModel>CnTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>CnDate'],formatter:'.formatter.visibleRCDate'}"/>
+													</VBox>
+												</CustomListItem>
+											</items>
+										</List>
+									</t:embeddedControl>
+								</t:TimelineItem>
+							</t:content>
+						</t:Timeline>
+						<t:Timeline axisOrientation="Vertical" showFilterBar="false" enableBackendFilter="false" enableDoubleSided="false" growingThreshold="0"
+							sortOldestFirst="true" content="{trackingModel>/exchange}" enableScroll="false">
+							<t:content>
+								<t:TimelineItem userName="{trackingModel>GroupStatusText}"
+									status="{parts:['trackingModel>HdrStatCode','trackingModel>GroupStatusCode'],formatter:'.formatter.handleColorExc'}"
+									icon="{parts:['trackingModel>GroupStatusCode','trackingModel>HdrStatCode'],formatter:'.formatter.statusHandleExc'}">
+									<t:embeddedControl>
+										<List showSeparators="None">
+											<items>
+												<CustomListItem>
+													<VBox>
+														<Label text="{i18n>statusDetPagHdr} {path:'trackingModel>HdrStatDesc',formatter:'.formatter.statusdforDetailPage'}" design="Bold"></Label>
+														<Text text="EO Date:{parts:['trackingModel>OrderDate','trackingModel>OrderTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>OrderDate'],formatter:'.formatter.visibleEODate'}"/>
+														<Text text="Approved by:{parts:['trackingModel>ApprovedBy','trackingModel>ApprovedAt'],formatter:'.formatter.valueDateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>ApprovedBy'],formatter:'.formatter.visibleEODate'}"/>
+														<Text text="Rejected by:{parts:['trackingModel>RejectedBy','trackingModel>RejectedAt'],formatter:'.formatter.valueDateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>RejectedBy'],formatter:'.formatter.visibleEODate'}"/>
+														<Text text="DO date:{parts:['trackingModel>DoDate','trackingModel>DoTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>DoDate'],formatter:'.formatter.visibleEPDate'}"/>
+														<Text text="PGI date:{parts:['trackingModel>PgiDate','trackingModel>PgiTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>PickupDate'],formatter:'.formatter.visibleEPDate'}"/>
+														<Text text="Invoice date:{parts:['trackingModel>InvoiceDate','trackingModel>InvoiceTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>InvoiceDate'],formatter:'.formatter.visibleEPDate'}"/>
+														<Text
+															text="Cancellation date:{parts:['trackingModel>CancellationDate','trackingModel>CancellationTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>CancellationDate'],formatter:'.formatter.visibleEPDate'}"/>
+														<Text text="Despatch date:{parts:['trackingModel>ShippingDate','trackingModel>ShippingTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>ShippingDate'],formatter:'.formatter.visibleEDDate'}"/>
+														<Text text="Customer receipt date:{parts:['trackingModel>PodDate','trackingModel>PodTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>PodDate'],formatter:'.formatter.visibleECDate'}"/>
+														<Text
+															text="Customer reject date:{parts:['trackingModel>PodRejectDate','trackingModel>PodRejectTime'],formatter:'.formatter.dateTimeConcat'}"
+															visible="{parts:['trackingModel>GroupStatusCode','trackingModel>PodRejectDate'],formatter:'.formatter.visibleECDate'}"/>
+													</VBox>
+												</CustomListItem>
+											</items>
+										</List>
+									</t:embeddedControl>
+								</t:TimelineItem>
+							</t:content>
+						</t:Timeline>
+					</IconTabFilter>
+					<!--for document details-->
+					<IconTabFilter key="DocumentKey" text="{i18n>documentDetailsIconTab}" tooltip="{i18n>documentDetailsIconTab}">
+						<SegmentedButton selectedKey="All" selectionChange="onDocument" class="segmentedCls headerSegment">
+							<items>
+								<SegmentedButtonItem text="All" key="All"/>
+								<SegmentedButtonItem text="Return" key="Return"/>
+								<SegmentedButtonItem text="Exchange" key="Exchange"/>
+							</items>
+						</SegmentedButton>
+						<Table visible="{oNewModel>/firstdoc}" alternateRowColors="true" showSeparators="None" class="sapUiSizeCompact sapUiTinyMarginTop"
+							inset="false" fixedLayout="false" items="{detailsDataModel>/results/navToReturnDocDetails/results}">
+							<columns>
+								<Column>
+									<Label text="Purchase Order" design="Bold"/>
+								</Column>
+								<Column>
+									<Label text="Return Order" design="Bold"/>
+								</Column>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+									<Label text="Delivery Order" design="Bold"/>
+								</Column>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+									<Label text="Credit Note" tooltip="{i18n>podTooltip}" design="Bold"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<ObjectStatus text="{parts:['detailsDataModel>PoNumber','detailsDataModel>PoDate'],formatter:'.formatter.dateValueConcat'}"/>
+									<ObjectStatus
+										text="{parts:['detailsDataModel>ReturnOrderNumber','detailsDataModel>CreationDate','detailsDataModel>CreationTime'],formatter:'.formatter.stringDateTimeConvert'}"
+										visible="{path:'DocumListSet>BillingDocNoTemp',formatter:'.formatter.deleteDuplicateRowVal'}" state="{DocumListSet>State}"/>
+									<ObjectStatus
+										text="{parts:['detailsDataModel>DeliveryOrderNumber','detailsDataModel>DeliveryOrderDate','detailsDataModel>DeliveryOrderTime'],formatter:'.formatter.stringDateTimeConvert'}"
+										visible="{path:'DocumListSet>ShipNoTemp',formatter:'.formatter.deleteDuplicateRowVal'}" state="{DocumListSet>State}"/>
+									<!--<ObjectStatus text="{DocumListSet>PodRejCodeBoth}"-->
+									<!--	visible="{path:'DocumListSet>PodRejCodeTemp',formatter:'.formatter.deleteDuplicateRowVal'}" state="{DocumListSet>State}"/>-->
+									<ObjectStatus
+										text="{parts:['detailsDataModel>CreditNoteNumber','detailsDataModel>CreditNoteDate','detailsDataModel>CreditNoteTime'],formatter:'.formatter.stringDateTimeConvert'}"
+										state="{DocumListSet>State}"/>
+								</ColumnListItem>
+							</items>
+						</Table>
+						<Table visible="{oNewModel>/seconddoc}" alternateRowColors="true" showSeparators="None" class="sapUiSizeCompact sapUiMediumMarginTop"
+							inset="false" fixedLayout="false" items="{detailsDataModel>/results/navToExchangeDocDetails/results}">
+							<columns>
+								<Column>
+									<Label text="Exchange PO." design="Bold"/>
+								</Column>
+								<Column>
+									<Label text="Exchange Order" design="Bold"/>
+								</Column>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+									<Label text="Delivery Order" design="Bold"/>
+								</Column>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+									<Label text="Billing" tooltip="{i18n>podTooltip}" design="Bold"/>
+								</Column>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+									<Label text="Shipment" tooltip="{i18n>podTooltip}" design="Bold"/>
+								</Column>
+								<Column demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline">
+									<Label text="POD" tooltip="{i18n>podTooltip}" design="Bold"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<ObjectStatus text="{parts:['detailsDataModel>PoNumber','detailsDataModel>PoDate'],formatter:'.formatter.dateValueConcat'}"
+										state="{path:'detailsDataModel>PodDate',formatter:'.formatter.documentState'}"/>
+									<ObjectStatus state="{path:'detailsDataModel>PodDate',formatter:'.formatter.documentState'}"
+										text="{parts:['detailsDataModel>ExchangeOrderNumber','detailsDataModel>CreationDate','detailsDataModel>CreationTime'],formatter:'.formatter.stringDateTimeConvert'}"/>
+									<ObjectStatus state="{path:'detailsDataModel>PodDate',formatter:'.formatter.documentState'}"
+										text="{parts:['detailsDataModel>DeliveryOrderNumber','detailsDataModel>DeliveryOrderDate','detailsDataModel>DeliveryOrderTime'],formatter:'.formatter.stringDateTimeConvert'}"/>
+									<ObjectStatus state="{path:'detailsDataModel>PodDate',formatter:'.formatter.documentState'}"
+										text="{parts:['detailsDataModel>BillingNumber','detailsDataModel>BillingDate','detailsDataModel>BillingTime'],formatter:'.formatter.stringDateTimeConvert'}"/>
+									<ObjectStatus state="{path:'detailsDataModel>PodDate',formatter:'.formatter.documentState'}"
+										text="{parts:['detailsDataModel>ShippingNumber','detailsDataModel>ShippingDate','detailsDataModel>ShippingTime'],formatter:'.formatter.stringDateTimeConvert'}"/>
+									<HBox>
+										<ObjectStatus
+											text="Accepted on {parts:['detailsDataModel>PodDateValue','detailsDataModel>PodDate','detailsDataModel>PodTime'],formatter:'.formatter.stringDateTimeConvert'}"
+											state="Warning" visible="{path:'detailsDataModel>PodDate',formatter:'.formatter.visiblityDate'}"/>
+										<ObjectStatus
+											text="Rejected on {parts:['detailsDataModel>PodDateValue','detailsDataModel>PodRejectDate','detailsDataModel>PodRejectTime'],formatter:'.formatter.stringDateTimeConvert'}"
+											visible="{path:'detailsDataModel>PodRejectDate',formatter:'.formatter.visiblityDate'}"/>
+									</HBox>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<!--for order list item-->
+					<IconTabFilter key="OrderListKey" text="{i18n>orderItemsIconTab}" tooltip="{i18n>orderItemsIconTab}">
+						<SegmentedButton selectedKey="All" selectionChange="onOrder" class="segmentedCls headerSegment">
+							<items>
+								<SegmentedButtonItem text="All" key="All"/>
+								<SegmentedButtonItem text="Return" key="Return"/>
+								<SegmentedButtonItem text="Exchange" key="Exchange"/>
+							</items>
+						</SegmentedButton>
+						<OverflowToolbar visible="{oNewModel>/firstlist}">
+							<HBox>
+								<Label text="Return Sub Total:"/>
+								<Label text="{parts:['OrderListSet>/returnTotal','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}" design="Bold"
+									visible="{path:'OrderListSet>/returnsBlur',formatter:'.formatter.blurNValue'}"></Label>
+								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'OrderListSet>/returnsBlur',formatter:'.formatter.blurValue'}"></Label>
+							</HBox>
+							<ToolbarSpacer></ToolbarSpacer>
+							<ObjectStatus text="Return Items: {OrderListSet>/returnLength} Item" state="Success"></ObjectStatus>
+							<!--<Button text="Expand All" press="onExpandReturn"></Button>-->
+						</OverflowToolbar>
+						<VBox class="sapUiSizeCompact" id="ID_VBOX_ORD_LIST" items="{OrderListSet>/items/returns}" visible="{oNewModel>/firstlist}">
+							<Panel expandable="true" class="sapUiSizeCompact">
+								<customData>
+									<core:CustomData key="blurItemLevel" value="{OrderListSet>Blur}" writeToDom="true"></core:CustomData>
+									<!--<core:CustomData key="blurItemLevel" value="{OrderListSet>Blur}" writeToDom="true"></core:CustomData>-->
+								</customData>
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{path:'OrderListSet>ItemDesc',formatter:'.formatter.sameValueReturn'}" wrapping="true"></Label>
+									</Toolbar>
+								</headerToolbar>
+								<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="false" labelSpanL="6" labelSpanM="6"
+									labelSpanS="4" emptySpanL="1" emptySpanM="1" emptySpanS="1" columnsL="2" columnsM="2">
+									<f:content>
+										<core:Title/>
+										<Label text="{OrderListSet>Currency}" design="Bold"/>
+										<Text text="{OrderListSet>UnitPrice}"/>
+										<Label text="{i18n>SKUOrdList}" design="Bold"/>
+										<Text text="{OrderListSet>Material}"/>
+										<Label text="{i18n>UOMOrdList}" tooltip="{i18n>uomTooltip}" design="Bold"/>
+										<Text text="{OrderListSet>SalesUnit}"/>
+										<Label text="{i18n>itemCategoryOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>ItemCategoryCode','OrderListSet>ItemCategoryDesc'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="Status" design="Bold"/>
+										<Text text="{parts:['OrderListSet>ItemStatusDesc','OrderListSet>RejectionReasonDesc'],formatter:'.formatter.f4ValueBind'}"/>
+										<core:Title/>
+										<Label text="{i18n>grossOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>GrossAmount','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="{i18n>discountOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>Discount','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="{i18n>taxOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>Tax','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="{i18n>quantity}" design="Bold"/>
+										<Text text="{OrderListSet>Quantity}" tooltip="{OrderListSet>Quantity}"/>
+										<Label text="CN Amount" design="Bold"/>
+										<Text text="{parts:['OrderListSet>NetItemWorth','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"
+											tooltip="{OrderListSet>NetItemWorth}"/>
+										<Label text="Action" design="Bold"/>
+										<VBox items="{OrderListSet>action}">
+											<Text text="{OrderListSet>}"/>
+										</VBox>
+									</f:content>
+								</f:SimpleForm>
+							</Panel>
+						</VBox>
+						<OverflowToolbar visible="{oNewModel>/secondlist}">
+							<HBox>
+								<Label text="Exchange Sub Total:"/>
+								<Label text="{parts:['OrderListSet>/exchangeTotal','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}" design="Bold"
+									visible="{path:'OrderListSet>/excBlur',formatter:'.formatter.blurNValue'}"></Label>
+								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'OrderListSet>/excBlur',formatter:'.formatter.blurValue'}"></Label>
+							</HBox>
+							<ToolbarSpacer></ToolbarSpacer>
+							<ObjectStatus text="Exchange Items: {OrderListSet>/exchangeLength} Item" state="Success"></ObjectStatus>
+							<!--<Button text="Expand All" press="onExpandExchange"></Button>-->
+						</OverflowToolbar>
+						<VBox class="sapUiSizeCompact" visible="{oNewModel>/secondlist}" items="{OrderListSet>/items/exchange}">
+							<Panel expandable="true" class="sapUiSizeCompact">
+								<customData>
+									<core:CustomData key="blurItemLevel" value="{OrderListSet>Blur}" writeToDom="true"></core:CustomData>
+									<!--<core:CustomData key="blurItemLevel" value="Double Wear" writeToDom="true"></core:CustomData>-->
+								</customData>
+								<headerToolbar>
+									<Toolbar>
+										<Label text="{path:'OrderListSet>ItemDesc',formatter:'.formatter.sameValueReturn'}" wrapping="true"></Label>
+									</Toolbar>
+								</headerToolbar>
+								<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="false" labelSpanL="6" labelSpanM="6"
+									labelSpanS="4" emptySpanL="1" emptySpanM="1" emptySpanS="1" columnsL="2" columnsM="2">
+									<f:content>
+										<core:Title/>
+										<Label text="{OrderListSet>Currency}" design="Bold"/>
+										<Text text="{OrderListSet>UnitPrice}"/>
+										<Label text="{i18n>SKUOrdList}" design="Bold"/>
+										<Text text="{OrderListSet>Material}"/>
+										<Label text="{i18n>UOMOrdList}" tooltip="{i18n>uomTooltip}" design="Bold"/>
+										<Text text="{OrderListSet>SalesUnit}"/>
+										<Label text="{i18n>itemCategoryOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>ItemCategoryCode','OrderListSet>ItemCategoryDesc'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="Status" design="Bold"/>
+										<Text text="{parts:['OrderListSet>ItemStatusDesc','OrderListSet>RejectionReasonDesc'],formatter:'.formatter.f4ValueBind'}"/>
+										<core:Title/>
+										<Label text="{i18n>grossOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>GrossAmount','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="{i18n>discountOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>Discount','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="{i18n>taxOrdList}" design="Bold"/>
+										<Text text="{parts:['OrderListSet>Tax','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="{i18n>quantity}" design="Bold"/>
+										<Text text="{OrderListSet>Quantity}" tooltip="{OrderListSet>Quantity}"/>
+										<Label text="Amount After Deduction" design="Bold"/>
+										<Text text="{parts:['OrderListSet>NetItemWorth','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
+										<Label text="Action" design="Bold"/>
+										<VBox items="{OrderListSet>action}">
+											<Text text="{OrderListSet>}"/>
+										</VBox>
+									</f:content>
+								</f:SimpleForm>
+							</Panel>
+						</VBox>
+					</IconTabFilter>
+					<!--for summary-->
+					<IconTabFilter key="SummyListKey" text="{i18n>summaryIconTab}" tooltip="{i18n>summaryIconTab}">
+						<SegmentedButton selectedKey="All" selectionChange="onSummary" class="segmentedCls headerSegment">
+							<items>
+								<SegmentedButtonItem text="All" key="All"/>
+								<SegmentedButtonItem text="Return" key="Return"/>
+								<SegmentedButtonItem text="Exchange" key="Exchange"/>
+							</items>
+						</SegmentedButton>
+						<OverflowToolbar visible="{oNewModel>/first}">
+							<HBox>
+								<Label text="Return Sub Total:"/>
+								<Label text="{parts:['summaryModel>/returns/OrderTotal','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}" design="Bold"
+									visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"></Label>
+								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+							</HBox>
+						</OverflowToolbar>
+						<!--title="Return Sub Total:{summaryModel>/returns/OrderTotal} ({OrderListSet>/currency})"-->
+						<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="false" labelSpanL="5" class="summaryCls"
+							labelSpanM="5" labelSpanS="4" emptySpanL="0" emptySpanM="0" columnsL="2" columnsM="2" id="ID_SIM_SUMM_ORD" visible="{oNewModel>/first}">
+							<f:content>
+								<core:Title/>
+								<Label text="{i18n>PONoSumm}" tooltip="{i18n>pONotooltip}" design="Bold"></Label>
+								<Text text="{summaryModel>/returns/CustomerPoNumber}"/>
+								<Label text="{i18n>paymentTermSumm}" design="Bold"/>
+								<Text text="{parts:['summaryModel>/returns/PaymentTermsDesc','summaryModel>/returns/PaymentTerms'],formatter:'.formatter.f4ValueBind'}"/>
+								<Label text="{i18n>totalOrderQtySumm}" tooltip="{i18n>totalOrderQtyTooltip}" design="Bold"/>
+								<HBox>
+									<Text text="{summaryModel>/returns/TotOrdqty}" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>totalFOCQty}" tooltip="{i18n>totalFOCQtyTooltip}" design="Bold"/>
+								<HBox>
+									<Text text="{summaryModel>/returns/TotFocqty}" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>totalAmountSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/returns/TotalAmount','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}"
+										visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>totalDiscountDiDoSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/returns/TotDisc','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}"
+										visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="CN Amount" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/returns/CnAmount','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}"
+										visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>taxAmountSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/returns/TaxAmount','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}"
+										visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>orderTotalSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/returns/OrderTotal','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}"
+										visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<core:Title/>
+								<Label text="{i18n>remarksSumm}" design="Bold">
+									<layoutData>
+										<l:GridData span="L5 M5 S12"/>
+									</layoutData>
+								</Label>
+								<TextArea value="{summaryModel>/returns/Remarks}" editable="false"></TextArea>
+								<Label text="Pick up Address" design="Bold">
+									<layoutData>
+										<l:GridData span="L5 M5 S12"/>
+									</layoutData>
+								</Label>
+								<TextArea value="{summaryModel>/returns/DeliveryAddress}" editable="false" rows="4"/>
+							</f:content>
+						</f:SimpleForm>
+						<OverflowToolbar visible="{oNewModel>/second}" class="sapUiMediumMarginTop">
+							<HBox>
+								<Label text="Exchange Sub Total:"/>
+								<Label text="{parts:['summaryModel>/exchange/OrderTotal','OrderListSet>/currency'],formatter:'.formatter.f4EValueBind'}" design="Bold"
+									visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"></Label>
+								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+							</HBox>
+						</OverflowToolbar>
+						<!--title="Exchange Sub Total:{summaryModel>/exchange/OrderTotal} ({OrderListSet>/currency})"-->
+						<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="false" labelSpanL="5" class="summaryCls"
+							labelSpanM="5" labelSpanS="4" emptySpanL="0" emptySpanM="0" columnsL="2" columnsM="2" visible="{oNewModel>/second}">
+							<f:content>
+								<core:Title/>
+								<Label text="{i18n>PONoSumm}" tooltip="{i18n>pONotooltip}" design="Bold"></Label>
+								<Text text="{summaryModel>/exchange/CustomerPoNumber}"/>
+								<Label text="{i18n>paymentTermSumm}" design="Bold"/>
+								<Text text="{parts:['summaryModel>/exchange/PaymentTermsDesc','summaryModel>/exchange/PaymentTerms'],formatter:'.formatter.f4EValueBind'}"/>
+								<Label text="{i18n>totalOrderQtySumm}" tooltip="{i18n>totalOrderQtyTooltip}" design="Bold"/>
+								<HBox>
+									<Text text="{summaryModel>/exchange/TotOrdqty}" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>totalFOCQty}" tooltip="{i18n>totalFOCQtyTooltip}" design="Bold"/>
+								<HBox>
+									<Text text="{summaryModel>/exchange/TotFocqty}" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>totalAmountSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/exchange/TotalAmount','OrderListSet>/currency'],formatter:'.formatter.f4EValueBind'}"
+										visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>totalDiscountDiDoSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/exchange/TotDisc','OrderListSet>/currency'],formatter:'.formatter.f4EValueBind'}"
+										visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="Net Amount" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/exchange/NetAmount','OrderListSet>/currency'],formatter:'.formatter.f4EValueBind'}"
+										visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>taxAmountSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/exchange/TaxAmount','OrderListSet>/currency'],formatter:'.formatter.f4EValueBind'}"
+										visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<Label text="{i18n>orderTotalSumm}" design="Bold"/>
+								<HBox>
+									<Text text="{parts:['summaryModel>/exchange/OrderTotal','OrderListSet>/currency'],formatter:'.formatter.f4EValueBind'}"
+										visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
+									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
+								</HBox>
+								<core:Title/>
+								<Label text="{i18n>remarksSumm}" design="Bold">
+									<layoutData>
+										<l:GridData span="L5 M5 S12"/>
+									</layoutData>
+								</Label>
+								<TextArea value="{summaryModel>/exchange/Remarks}" editable="false"></TextArea>
+								<Label text="{i18n>deliveryAddressSumm}" design="Bold">
+									<layoutData>
+										<l:GridData span="L5 M5 S12"/>
+									</layoutData>
+								</Label>
+								<TextArea value="{summaryModel>/exchange/DeliveryAddress}" editable="false" rows="4"/>
+							</f:content>
+						</f:SimpleForm>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</content>
+		<footer>
+			<Toolbar id="ID_FOOTER_DET">
+				<ToolbarSpacer/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>
