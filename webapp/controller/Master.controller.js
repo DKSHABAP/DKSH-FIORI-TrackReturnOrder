@@ -354,7 +354,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			} else {
 				a = this.searchMasterFrag.getModel().getData()
 			}
-			var r = new sap.ui.model.json.JSONModel("FilterModel");
+			// var r = new sap.ui.model.json.JSONModel("FilterModel");
+			var r = new sap.ui.model.json.JSONModel(a);
 			this.searchMasterFrag.setModel(r);
 			var i = JSON.stringify(a);
 			this.tempDataFragment = JSON.parse(i);
