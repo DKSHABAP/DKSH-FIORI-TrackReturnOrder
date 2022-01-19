@@ -404,6 +404,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					e = "CustomerName eq '" + t.CustomerName + "'"
 				}
 			}
+			// [+] Start modification - STRY0015013
+			// [+] End modification - STRY0015013
 			if (t.CustomerPoNumber && t.CustomerPoNumber.trim() !== "") {
 				if (e !== "") {
 					e = e + " and CustomerPoNumber eq '" + t.CustomerPoNumber + "'"
