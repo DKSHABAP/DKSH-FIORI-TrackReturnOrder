@@ -405,6 +405,21 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				}
 			}
 			// [+] Start modification - STRY0015013
+			if (t.BName && t.BName.trim() !== "") {
+				if (e !== "") {
+					e = e + " and BName eq '" + t.BName + "'"
+				} else {
+					e = "BName eq '" + t.BName + "'"
+				}
+			}
+
+			if (t.RefInvNo && t.RefInvNo.trim() !== "") {
+				if (e !== "") {
+					e = e + " and RefInvNo eq '" + t.RefInvNo + "'"
+				} else {
+					e = "RefInvNo eq '" + t.RefInvNo + "'"
+				}
+			}
 			// [+] End modification - STRY0015013
 			if (t.CustomerPoNumber && t.CustomerPoNumber.trim() !== "") {
 				if (e !== "") {
