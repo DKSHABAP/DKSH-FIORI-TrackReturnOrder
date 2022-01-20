@@ -22,9 +22,9 @@
 						liveChange="onLiveChangeCustIdFilter"></Input>
 					<!--[+] Start modification - STRY0015013-->
 					<Label text="{i18n>bnameFrag}" design="Bold"/>
-					<Input value="{/BName}" tooltip="{/BName}" placeholder="{i18n>enter} {i18n>bnameFrag}" maxLength="10" liveChange="onLiveChangeBNameFilter"></Input>
+					<Input value="{/Bname}" tooltip="{/Bname}" placeholder="{i18n>enter} {i18n>bnameFrag}" maxLength="10" liveChange="onLiveChangeBnameFilter"></Input>
 					<Label text="{i18n>refInvFrag}" design="Bold"/>
-					<Input value="{/RefInvNo}" tooltip="{/RefInvNo}" placeholder="{i18n>enter} {i18n>refInvFrag}" maxLength="10" liveChange="onLiveChangeRefInvNoFilter"></Input>
+					<Input value="{/RefInvoice}" tooltip="{/RefInvoice}" placeholder="{i18n>enter} {i18n>refInvFrag}" maxLength="10" liveChange="onLiveChangeRefInvoiceFilter"></Input>
 					<!--[+] End modification - STRY0015013-->
 					<Label text="Sold-to-party Name" design="Bold"/>
 					<Input value="{/CustomerName}" tooltip="{/CustomerName}" placeholder="{i18n>enter} {i18n>customerIdFrag} {i18n>name}"

@@ -363,6 +363,10 @@
 								<core:Title/>
 								<Label text="{i18n>PONoSumm}" tooltip="{i18n>pONotooltip}" design="Bold"></Label>
 								<Text text="{summaryModel>/returns/CustomerPoNumber}"/>
+								<!--[+] Start modification STRY0015013-->
+								<Label text="{i18n>Bname}" tooltip="{i18n>bNametooltip}" design="Bold"></Label>
+								<Text text="{summaryModel>/returns/Bname}"/>
+								<!--[+] End Modification STRY0015013-->
 								<Label text="{i18n>paymentTermSumm}" design="Bold"/>
 								<Text text="{parts:['summaryModel>/returns/PaymentTermsDesc','summaryModel>/returns/PaymentTerms'],formatter:'.formatter.f4ValueBind'}"/>
 								<Label text="{i18n>totalOrderQtySumm}" tooltip="{i18n>totalOrderQtyTooltip}" design="Bold"/>
