@@ -385,7 +385,6 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			this.readMasterListData(o, "")
 		},
 		handleOkReadSoFilter: function () {
-			debugger;
 			var e = "";
 			var t = this.searchMasterFrag.getModel().getData();
 			if (t.returnOrder && t.returnOrder.trim() !== "") {
