@@ -405,19 +405,19 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				}
 			}
 			// [+] Start modification - STRY0015013
-			if (t.BName && t.BName.trim() !== "") {
+			if (t.Bname && t.Bname.trim() !== "") {
 				if (e !== "") {
-					e = e + " and BName eq '" + t.BName + "'"
+					e = e + " and Bname eq '" + t.Bname + "'"
 				} else {
-					e = "BName eq '" + t.BName + "'"
+					e = "Bname eq '" + t.Bname + "'"
 				}
 			}
 
-			if (t.RefInvNo && t.RefInvNo.trim() !== "") {
+			if (t.RefInvoice && t.RefInvoice.trim() !== "") {
 				if (e !== "") {
-					e = e + " and RefInvNo eq '" + t.RefInvNo + "'"
+					e = e + " and RefInvoice eq '" + t.RefInvoice + "'"
 				} else {
-					e = "RefInvNo eq '" + t.RefInvNo + "'"
+					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
 			}
 			// [+] End modification - STRY0015013
