@@ -2,43 +2,38 @@
 	<Dialog class="sapUiSizeCompact">
 		<customHeader>
 			<Bar>
-				<contentLeft></contentLeft>
+				<contentLeft/>
 				<contentMiddle>
 					<Label text="{i18n>filterFragTitle}" design="Bold"/>
 				</contentMiddle>
-				<contentRight></contentRight>
+				<contentRight/>
 			</Bar>
 		</customHeader>
 		<content>
-			<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="true" labelSpanL="3" labelSpanM="3"
-				emptySpanL="1" emptySpanM="1" columnsL="1" columnsM="1" class="sapUiSizeCompact simplFormPaddCls">
+			<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="true" labelSpanL="3" labelSpanM="3" emptySpanL="1" emptySpanM="1" columnsL="1" columnsM="1" class="sapUiSizeCompact simplFormPaddCls">
 				<f:content>
 					<core:Title/>
 					<Label text="Return Order No." design="Bold"/>
-					<Input tooltip="{/returnOrder}" value="{/returnOrder}" placeholder="{i18n>enter} {i18n>rono}" maxLength="10"
-						liveChange="onLiveChangeSalesOrderFilter"></Input>
+					<Input tooltip="{/returnOrder}" value="{/returnOrder}" placeholder="{i18n>enter} {i18n&gt;rono}" maxLength="10" liveChange="onLiveChangeSalesOrderFilter"/>
 					<Label text="{i18n>customerIdFrag}" design="Bold"/>
-					<Input value="{/CustomerNo}" tooltip="{/CustomerNo}" placeholder="{i18n>enter} {i18n>customerIdFrag}" maxLength="10"
-						liveChange="onLiveChangeCustIdFilter"></Input>
+					<Input value="{/CustomerNo}" tooltip="{/CustomerNo}" placeholder="{i18n>enter} {i18n&gt;customerIdFrag}" maxLength="10" liveChange="onLiveChangeCustIdFilter"/>
 					<!--[+] Start modification - STRY0015013-->
 					<Label text="{i18n>bnameFrag}" design="Bold"/>
-					<Input value="{/BName}" tooltip="{/BName}" placeholder="{i18n>enter} {i18n>bnameFrag}" maxLength="10" liveChange="onLiveChangeBNameFilter"></Input>
+					<Input value="{/BName}" tooltip="{/BName}" placeholder="{i18n>enter} {i18n&gt;bnameFrag}" maxLength="30" liveChange="onLiveChangeBNameFilter"/>
 					<Label text="{i18n>refInvFrag}" design="Bold"/>
-					<Input value="{/RefInvNo}" tooltip="{/RefInvNo}" placeholder="{i18n>enter} {i18n>refInvFrag}" maxLength="10" liveChange="onLiveChangeRefInvNoFilter"></Input>
+					<Input value="{/RefInvNo}" tooltip="{/RefInvNo}" placeholder="{i18n>enter} {i18n&gt;refInvFrag}" maxLength="10" liveChange="onLiveChangeRefInvNoFilter"/>
 					<!--[+] End modification - STRY0015013-->
 					<Label text="Sold-to-party Name" design="Bold"/>
-					<Input value="{/CustomerName}" tooltip="{/CustomerName}" placeholder="{i18n>enter} {i18n>customerIdFrag} {i18n>name}"
-						liveChange="onLiveChangeCustIdFilter"></Input>
+					<Input value="{/CustomerName}" tooltip="{/CustomerName}" placeholder="{i18n>enter} {i18n&gt;customerIdFrag} {i18n>name}" liveChange="onLiveChangeCustIdFilter"/>
 					<Label text="{i18n>statusFrag}" design="Bold"/>
 					<Label text="{i18n>ponumber}" design="Bold"/>
-					<Input value="{/CustomerPoNumber}" tooltip="{/CustomerPoNumber}" placeholder="{i18n>enter} {i18n>ponumber}"
-						liveChange="onLiveChangeCustIdFilter"></Input>
+					<Input value="{/CustomerPoNumber}" tooltip="{/CustomerPoNumber}" placeholder="{i18n>enter} {i18n&gt;ponumber}" liveChange="onLiveChangeCustIdFilter"/>
 					<Label text="{i18n>statusFrag}" design="Bold"/>
-					<MultiComboBox placeholder="{i18n>select} {i18n>statusFrag}" items="{FilterModel>/results}" selectedKeys="{/SelStatus}">
-						<core:Item text="{FilterModel>statusDescription}" key="{FilterModel>status}"></core:Item>
+					<MultiComboBox placeholder="{i18n>select} {i18n&gt;statusFrag}" items="{FilterModel>/results}" selectedKeys="{/SelStatus}">
+						<core:Item text="{FilterModel>statusDescription}" key="{FilterModel>status}"/>
 					</MultiComboBox>
 					<Label text="{i18n>dateRangeFrag}" design="Bold"/>
-					<DateRangeSelection displayFormat="dd.MM.yyyy" dateValue="{/StartDate}" secondDateValue="{/EndDate}" change="onChangeDateRange"></DateRangeSelection>
+					<DateRangeSelection displayFormat="dd.MM.yyyy" dateValue="{/StartDate}" secondDateValue="{/EndDate}" change="onChangeDateRange"/>
 				</f:content>
 			</f:SimpleForm>
 		</content>
