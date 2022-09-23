@@ -60,6 +60,17 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			return e
 		},
 		getLoggedInUserName: function (e) {
+			if (!this.getView().getModel()) {
+				var oModel = {
+					SalesOrder: "",
+					CustomerNo: "",
+					SelStatus: undefined,
+					StartDate: null,
+					EndDate: null
+				};
+				this.getView().setModel(new t(oModel));
+			}
+			var oDRS = u.getDefaultDateRangeSelectionValues();
 			// Start: STRY0014353 - Incident: Track Return Order (data access)
 			this.getView().setModel(new t(), "oLoggedInUserDetailModel");
 			this.getView().getModel("oLoggedInUserDetailModel").loadData("/DKSHJavaService2/userDetails/findAllRightsForUserInDomain/" +
@@ -73,10 +84,15 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					this.materialGroupDataAccess = (oData.ATR04) ? oData.ATR04 : "No Access";
 					this.materialGroup4DataAccess = (oData.ATR05) ? oData.ATR05 : "No Access";
 					this.custCodeDataAccess = (oData.ATR06) ? oData.ATR06 : "No Access";
-					var s = new Date;
-					var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
-					var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
+					var r = u.DateConversion(oDRS.secondDateValue);
+					var i = u.DateConversion(oDRS.dateValue);
 					var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
+					// Set defaults to the search fragment model properties
+					// if(oData.ATR01)	oModel.SalesOrg = oData.ATR01;
+					// if(oData.ATR02)	oModel.DistChan = oData.ATR02;
+					// if(oData.ATR03)	oModel.Division = oData.ATR02;
+					oModel.StartDate = oDRS.dateValue;
+					oModel.EndDate = oDRS.secondDateValue;
 					this.readMasterListData(o, "");
 				}
 			}.bind(this)).catch(function (oErr) {});
@@ -218,12 +234,13 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						var t = "";
 						if (e.statusCode === 504) {
 							t = "Request timed-out. Please try again!";
-							s.errorMsg(t)
+							s.errorMsg(t);
 						} else {
-							s.errorMsg("Data Not Found")
+							this.handlefilter();
+							s.errorMsg("Data Not Found");
 						}
-					}
-				})
+					}.bind(this)
+				});
 			}
 		},
 		errorMsg: function (e) {
@@ -233,7 +250,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				title: "Error",
 				actions: [sap.m.MessageBox.Action.OK],
 				onClose: function (e) {}
-			})
+			});
 		},
 		handleFirstItemSetSelected: function (e) {
 			var t = this.getView().byId("ID_MASTER_LIST");
@@ -284,6 +301,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			})
 		},
 		onSearchMasterList: function (e) {
+			var oModel = this.getView().getModel().getData();
+			var oDSR = u.getDefaultDateRangeSelectionValues();
 			var t = this;
 			if (e.getParameters().refreshButtonPressed) {
 				var a = new Date;
@@ -291,13 +310,15 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					SalesOrder: "",
 					CustomerNo: "",
 					SelStatus: undefined,
-					StartDate: u.DateConversion(new Date(a.getFullYear(), a.getMonth(), a.getDate())),
-					EndDate: u.DateConversion(new Date(a.getFullYear(), a.getMonth(), a.getDate() - 7))
+					StartDate: u.DateConversion(oDSR.dateValue),
+					EndDate: u.DateConversion(oDSR.secondDateValue)
 				};
 				var r = JSON.stringify(s);
 				this.tempDataFragment = JSON.parse(r);
-				var i = "CreationDate le datetime'" + s.StartDate + "' and CreationDate ge datetime'" + s.EndDate + "'";
-				this.readMasterListData(i, "")
+				oModel.StartDate = oDSR.dateValue;
+				oModel.EndDate = oDSR.secondDateValue;
+				var i = "CreationDate le datetime'" + s.EndDate + "' and CreationDate ge datetime'" + s.StartDate + "'";
+				this.readMasterListData(i, "");
 			} else {
 				var o = e.getParameters().query;
 				var n = [];
@@ -364,23 +385,26 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					StartDate: null,
 					EndDate: null
 				};
-				a = s
+				a = s;
 			} else {
-				a = this.searchMasterFrag.getModel().getData()
+				a = this.searchMasterFrag.getModel().getData();
 			}
 			// var r = new sap.ui.model.json.JSONModel("FilterModel");
-			var r = new sap.ui.model.json.JSONModel(a);
+			// var r = new sap.ui.model.json.JSONModel(a);
+			var r = this.getView().getModel();
 			this.searchMasterFrag.setModel(r);
 			var i = JSON.stringify(a);
 			this.tempDataFragment = JSON.parse(i);
 			if (sap.ui.Device.system.desktop) {
-				this.searchMasterFrag.setContentWidth("50%")
+				this.searchMasterFrag.setContentWidth("50%");
 			} else {
-				this.searchMasterFrag.setContentWidth("100%")
+				this.searchMasterFrag.setContentWidth("100%");
 			}
-			this.searchMasterFrag.open()
+			this.searchMasterFrag.open();
 		},
 		handleReadAllSOIntial: function () {
+			var oModel = this.getView().getModel().getData();
+			var oDSR = u.getDefaultDateRangeSelectionValues();
 			var e = {
 				SalesOrder: "",
 				CustomerNo: "",
@@ -396,14 +420,18 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			this.searchMasterFrag.setModel(t);
 			var a = JSON.stringify(e);
 			this.tempDataFragment = JSON.parse(a);
-			var s = new Date;
-			var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
-			var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
+			var s = new Date();
+			var r = u.DateConversion(oDSR.secondDateValue);
+			var i = u.DateConversion(oDSR.dateValue);
+			oModel.StartDate = oDSR.dateValue;
+			oModel.EndDate = oDSR.secondDateValue;
 			var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
-			this.readMasterListData(o, "")
+			this.readMasterListData(o, "");
 		},
 		handleOkReadSoFilter: function () {
-			debugger;
+			var oModel = this.getView().getModel().getData();
+			var oDSR = u.getDefaultDateRangeSelectionValues();
+			// debugger;
 			var e = "";
 			// var j = {
 			// 	SalesOrder: "",
@@ -454,7 +482,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				//Start-Invoice Filter Enhancement
 				if (t.RefInvoice !== "" && t.SalesOrg === undefined ||
 					t.DistChan === undefined ||
-					t.Division === undefined ) {
+					t.Division === undefined) {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
@@ -521,11 +549,13 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			}
 			if (e) this.readMasterListData(e, "F");
 			else {
-				var n = new Date;
-				var a = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate()));
-				var s = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate() - 7));
+				// var n = new Date;
+				var a = u.DateConversion(oDSR.secondDateValue);
+				var s = u.DateConversion(oDSR.dateValue);
+				oModel.StartDate = oDSR.dateValue;
+				oModel.EndDate = oDSR.secondDateValue;
 				var l = "CreationDate le datetime'" + a + "' and CreationDate ge datetime'" + s + "'";
-				this.readMasterListData(l, "")
+				this.readMasterListData(l, "");
 			}
 		},
 		handleCancelMasterSearch: function () {
