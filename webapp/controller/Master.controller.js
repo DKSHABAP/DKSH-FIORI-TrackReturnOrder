@@ -403,7 +403,6 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			this.readMasterListData(o, "")
 		},
 		handleOkReadSoFilter: function () {
-			debugger;
 			var e = "";
 			// var j = {
 			// 	SalesOrder: "",
@@ -452,9 +451,9 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
 				//Start-Invoice Filter Enhancement
-				if (t.RefInvoice !== "" && t.SalesOrg === undefined ||
+				if ( (t.RefInvoice !== "" ) && ( t.SalesOrg === undefined  ||
 					t.DistChan === undefined ||
-					t.Division === undefined ) {
+					t.Division === undefined ) ) {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
