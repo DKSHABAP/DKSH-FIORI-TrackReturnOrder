@@ -236,6 +236,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 							t = "Request timed-out. Please try again!";
 							s.errorMsg(t);
 						} else {
+							this.getView().getModel().refresh();
 							this.handlefilter();
 							s.errorMsg("Data Not Found");
 						}
