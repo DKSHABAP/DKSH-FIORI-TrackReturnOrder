@@ -442,6 +442,26 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				} else {
 					e = "Bname eq '" + t.Bname + "'"
 				}
+				// force creation date
+				if (t.StartDate === "" || t.StartDate === null) {
+					// var a = u.DateConversion(t.StartDate);
+					// var s = u.DateConversion(t.EndDate);
+					// if (e !== "") {
+					// 	e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					// } else {
+					// 	e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					// }
+
+					var today = new Date();
+					var endDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+					var startDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7));
+					if (e !== "") {
+						e = e + " and (CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
+					} else {
+						e = "(CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
+					}
+				}
+
 			}
 
 			if (t.RefInvoice && t.RefInvoice.trim() !== "") {
@@ -451,9 +471,9 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
 				//Start-Invoice Filter Enhancement
-				if ( (t.RefInvoice !== "" ) && ( t.SalesOrg === undefined  ||
-					t.DistChan === undefined ||
-					t.Division === undefined ) ) {
+				if ((t.RefInvoice !== "") && (t.SalesOrg === undefined ||
+						t.DistChan === undefined ||
+						t.Division === undefined)) {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
