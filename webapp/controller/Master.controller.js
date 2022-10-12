@@ -237,8 +237,11 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 							s.errorMsg(t);
 						} else {
 							this.getView().getModel().refresh();
-							this.handlefilter();
-							s.errorMsg("Data Not Found");
+							// s.errorMsg("Data Not Found");
+							if (!sap.ui.Device.system.phone) {
+								var p = sap.ui.core.UIComponent.getRouterFor(this);
+								p.navTo("notFound", true);
+							}
 						}
 					}.bind(this)
 				});
