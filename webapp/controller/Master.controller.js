@@ -471,9 +471,9 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
 				//Start-Invoice Filter Enhancement
-				if ((t.RefInvoice !== "") && (t.SalesOrg === undefined ||
-						t.DistChan === undefined ||
-						t.Division === undefined)) {
+				if ( (t.RefInvoice !== "") && (t.SalesOrg === undefined || t.SalesOrg === "")||
+						(t.DistChan === undefined || t.DistChan === "" )||
+						(t.Division === undefined || t.Division === "" ) )  {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
