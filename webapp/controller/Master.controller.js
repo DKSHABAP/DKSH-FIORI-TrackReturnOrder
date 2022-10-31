@@ -31,7 +31,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						var a = t.getData().results;
 						if (a.length === 1) {
 							var s = this.getView().byId("ID_MASTER_LIST");
-							s.getItems()[0].setSelected(false)
+							s.getItems()[0].setSelected(false);
 						}
 					}
 				}
@@ -50,14 +50,14 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					t.getView().setModel(i, "userapi");
 					e = t.getView().getModel("userapi").getData().name;
 					t.userID = e;
-					t.getLoggedInUserName(e)
+					t.getLoggedInUserName(e);
 				},
 				error: function (e) {
-					sap.m.MessageBox.error("Could not retrieve logged in user details")
+					sap.m.MessageBox.error("Could not retrieve logged in user details");
 				},
 				complete: function (e) {}
 			});
-			return e
+			return e;
 		},
 		getLoggedInUserName: function (e) {
 			if (!this.getView().getModel()) {
@@ -152,7 +152,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			// End: STRY0014353 - Incident: Track Return Order (data access)
 		},
 		readMasterListData: function (e, t) {
-			var a = new sap.m.BusyDialog;
+			var a = new sap.m.BusyDialog();
 			if (this.custAttribute) {
 				a.open();
 				var s = this;
@@ -162,47 +162,48 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				var i = "/masterDetailsSet";
 				if (s.salesOrgDataAccess && s.salesOrgDataAccess != "No Access" && s.salesOrgDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and SalesOrgDac eq '" + s.salesOrgDataAccess + "'"
+						e = e + " and SalesOrgDac eq '" + s.salesOrgDataAccess + "'";
 					} else {
-						e = "SalesOrgDac eq '" + s.salesOrgDataAccess + "'"
+						e = "SalesOrgDac eq '" + s.salesOrgDataAccess + "'";
 					}
 				}
 				if (s.custCodeDataAccess && s.custCodeDataAccess !== "No Access" && s.custCodeDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and CustomerCodeDac eq '" + s.custCodeDataAccess + "'"
+						e = e + " and CustomerCodeDac eq '" + s.custCodeDataAccess + "'";
 					} else {
-						e = "CustomerCodeDac eq '" + s.custCodeDataAccess + "'"
+						e = "CustomerCodeDac eq '" + s.custCodeDataAccess + "'";
 					}
 				}
 				if (s.distrChannelDataAccess && s.distrChannelDataAccess !== "No Access" && s.distrChannelDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and DistChannelDac eq '" + s.distrChannelDataAccess + "'"
+						e = e + " and DistChannelDac eq '" + s.distrChannelDataAccess + "'";
 					} else {
-						e = "DistChannelDac eq '" + s.distrChannelDataAccess + "'"
+						e = "DistChannelDac eq '" + s.distrChannelDataAccess + "'";
 					}
 				}
 				if (s.divisionDataAccess && s.divisionDataAccess !== "No Access" && s.divisionDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and DivisionDac eq '" + s.divisionDataAccess + "'"
+						e = e + " and DivisionDac eq '" + s.divisionDataAccess + "'";
 					} else {
-						e = "DivisionDac eq '" + s.divisionDataAccess + "'"
+						e = "DivisionDac eq '" + s.divisionDataAccess + "'";
 					}
 				}
 				if (s.materialGroupDataAccess && s.materialGroupDataAccess !== "No Access" && s.materialGroupDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and MaterialGroupDac eq '" + s.materialGroupDataAccess + "'"
+						e = e + " and MaterialGroupDac eq '" + s.materialGroupDataAccess + "'";
 					} else {
-						e = "MaterialGroupDac eq '" + s.materialGroupDataAccess + "'"
+						e = "MaterialGroupDac eq '" + s.materialGroupDataAccess + "'";
 					}
 				}
 				if (s.materialGroup4DataAccess && s.materialGroup4DataAccess !== "No Access" && s.materialGroup4DataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'"
+						e = e + " and MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'";
 					} else {
-						e = "MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'"
+						e = "MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'";
 					}
 				}
-				if (e) i = i + "?$filter=" + e;
+				if (e) 
+					i = i + "?$filter=" + e;
 				r.read(i, {
 					async: true,
 					success: function (e, t) {
@@ -214,11 +215,11 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 							var n = e.results[r].CreationTime.split("PT")[1].split("H")[1].split("M")[0];
 							var l = e.results[r].CreationTime.split("PT")[1].split("H")[1].split("M")[1].split("S")[0];
 							if (i !== null) {
-								e.results[r].CreatedDateTime = new Date(i[0], i[1], i[2], o, n, l)
+								e.results[r].CreatedDateTime = new Date(i[0], i[1], i[2], o, n, l);
 							} else {
-								e.results[r].CreatedDateTime = null
+								e.results[r].CreatedDateTime = null;
 							}
-							e.results[r].CreatedDateTime = u.dateTimeFormat(e.results[r].CreatedDateTime)
+							e.results[r].CreatedDateTime = u.dateTimeFormat(e.results[r].CreatedDateTime);
 						}
 						var c = new sap.ui.model.json.JSONModel({
 							results: e.results
@@ -227,14 +228,14 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						if (e.results.length === 0 && !sap.ui.Device.system.phone) {
 							var d = sap.ui.core.UIComponent.getRouterFor(s);
 							d.navTo("notFound", true);
-							return
+							return;
 						}
 						var m = s.getView().byId("ID_MASTER_LIST").getBinding("items");
 						var D = s.i18nModel.getProperty("trackingDetailsMastPageTitle");
 						s.getView().byId("ID_MAST_PAGE").setTitle(D + " (" + m.getLength() + ")");
 						s.getView().byId("ID_MAST_PAGE").addStyleClass("title sapMIBar-CTX sapMTitle");
 						if (s.searchMasterFrag) s.searchMasterFrag.close();
-						if (!sap.ui.Device.system.phone) s.handleFirstItemSetSelected()
+						if (!sap.ui.Device.system.phone) s.handleFirstItemSetSelected();
 					},
 					error: function (e) {
 						a.close();
@@ -245,6 +246,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						} else {
 							this.getView().getModel().refresh();
 							// s.errorMsg("Data Not Found");
+							if (s.searchMasterFrag) 
+								s.searchMasterFrag.close();
 							if (!sap.ui.Device.system.phone) {
 								var p = sap.ui.core.UIComponent.getRouterFor(this);
 								p.navTo("notFound", true);
@@ -273,7 +276,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var s = sap.ui.core.UIComponent.getRouterFor(this);
 			s.navTo("object", {
 				contextPath: a.ReturnOrderNumber
-			}, true)
+			}, true);
 		},
 		handleItemPressed: function (e) {
 			var t = e.getParameter("listItem").getBindingContext("masterDataModel").getObject();
@@ -283,7 +286,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var a = sap.ui.core.UIComponent.getRouterFor(this);
 			a.navTo("object", {
 				contextPath: t.ReturnOrderNumber
-			}, true)
+			}, true);
 		},
 		fnGetStatus: function () {
 			var e = this;
@@ -296,20 +299,20 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					var s = new sap.ui.model.json.JSONModel({
 						results: t.results
 					});
-					e.getView().setModel(s, "FilterModel")
+					e.getView().setModel(s, "FilterModel");
 				},
 				error: function (t) {
 					var a = "";
 					if (t.statusCode === 504) {
 						a = "Request timed-out. Please try again!";
-						e.errorMsg(a)
+						e.errorMsg(a);
 					} else {
 						a = JSON.parse(t.responseText);
 						a = a.error.message.value;
-						e.errorMsg(a)
+						e.errorMsg(a);
 					}
 				}
-			})
+			});
 		},
 		onSearchMasterList: function (e) {
 			var oModel = this.getView().getModel().getData();
@@ -467,29 +470,29 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var t = this.searchMasterFrag.getModel().getData();
 			//var t = new sap.ui.model.json.JSONModel(j);
 			//this.searchMasterFrag.setModel(t);
-			if (t.returnOrder && t.returnOrder.trim() !== "") {
-				e = "ReturnOrderNumber eq '" + t.returnOrder + "'"
+			if (t.returnOrder) {
+				e = "ReturnOrderNumber eq '" + t.returnOrder + "'";
 			}
-			if (t.CustomerNo && t.CustomerNo.trim() !== "") {
+			if (t.CustomerNo) {
 				if (e !== "") {
-					e = e + " and CustomerCode eq '" + t.CustomerNo + "'"
+					e = e + " and CustomerCode eq '" + t.CustomerNo + "'";
 				} else {
-					e = "CustomerCode eq '" + t.CustomerNo + "'"
+					e = "CustomerCode eq '" + t.CustomerNo + "'";
 				}
 			}
-			if (t.CustomerName && t.CustomerName.trim() !== "") {
+			if (t.CustomerName) {
 				if (e !== "") {
-					e = e + " and CustomerName eq '" + t.CustomerName + "'"
+					e = e + " and CustomerName eq '" + t.CustomerName + "'";
 				} else {
-					e = "CustomerName eq '" + t.CustomerName + "'"
+					e = "CustomerName eq '" + t.CustomerName + "'";
 				}
 			}
 			// [+] Start modification - STRY0015013
-			if (t.Bname && t.Bname.trim() !== "") {
+			if (t.Bname) {
 				if (e !== "") {
-					e = e + " and Bname eq '" + t.Bname + "'"
+					e = e + " and Bname eq '" + t.Bname + "'";
 				} else {
-					e = "Bname eq '" + t.Bname + "'"
+					e = "Bname eq '" + t.Bname + "'";
 				}
 				// force creation date
 				if (t.StartDate === "" || t.StartDate === null) {
@@ -513,37 +516,34 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 
 			}
 
-			if (t.RefInvoice && t.RefInvoice.trim() !== "") {
+			if (t.RefInvoice) {
 				if (e !== "") {
-					e = e + " and RefInvoice eq '" + t.RefInvoice + "'"
+					e = e + " and RefInvoice eq '" + t.RefInvoice + "'";
 				} else {
-					e = "RefInvoice eq '" + t.RefInvoice + "'"
+					e = "RefInvoice eq '" + t.RefInvoice + "'";
 				}
 				//Start-Invoice Filter Enhancement
-				if (t.RefInvoice !== "" && t.SalesOrg === undefined ||
-					t.DistChan === undefined ||
-					t.Division === undefined) {
+				if (!t.SalesOrg || !t.DistChan || !t.Division) {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
 					return false;
 				}
 
-				if (t.SalesOrg !== "" || t.SalesOrg !== null) {
+				if (t.SalesOrg) {
 					e = e + " and SalesOrg eq '" + t.SalesOrg + "'";
 				} else {
 					e = "SalesOrg eq '" + t.SalesOrg + "'";
 
 				}
 
-				if (t.DistChan !== "" || t.DistChan !== null) {
+				if (t.DistChan) {
 					e = e + " and DistChan eq '" + t.DistChan + "'";
 				} else {
 					e = "DistChan eq '" + t.DistChan + "'";
-
 				}
 
-				if (t.Division !== "" || t.Division !== null) {
+				if (t.Division) {
 					e = e + " and Division eq '" + t.Division + "'";
 				} else {
 					e = "Division eq '" + e.Division + "'";
@@ -554,20 +554,20 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 
 			}
 			// [+] End modification - STRY0015013
-			if (t.CustomerPoNumber && t.CustomerPoNumber.trim() !== "") {
+			if (t.CustomerPoNumber) {
 				if (e !== "") {
-					e = e + " and CustomerPoNumber eq '" + t.CustomerPoNumber + "'"
+					e = e + " and CustomerPoNumber eq '" + t.CustomerPoNumber + "'";
 				} else {
-					e = "CustomerPoNumber eq '" + t.CustomerPoNumber + "'"
+					e = "CustomerPoNumber eq '" + t.CustomerPoNumber + "'";
 				}
 			}
-			if (t.StartDate && t.StartDate !== null) {
+			if (t.StartDate) {
 				var a = u.DateConversion(t.StartDate);
 				var s = u.DateConversion(t.EndDate);
 				if (e !== "") {
-					e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')";
 				} else {
-					e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')";
 				}
 			}
 			if (t.SelStatus && t.SelStatus.length > 0) {
@@ -575,16 +575,20 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				var i = "";
 				if (e !== "") {
 					for (var o = 0; o < r.length; o++) {
-						if (o === r.length - 1) i = i + " HeaderStatus eq '" + r[o] + "'";
-						else i = i + " HeaderStatus eq '" + r[o] + "' or "
+						if (o === r.length - 1)
+							i = i + " HeaderStatus eq '" + r[o] + "'";
+						else
+							i = i + " HeaderStatus eq '" + r[o] + "' or ";
 					}
-					e = e + " and (" + i + ")"
+					e = e + " and (" + i + ")";
 				} else {
 					for (var o = 0; o < r.length; o++) {
-						if (o === r.length - 1) i = i + " HeaderStatus eq '" + r[o] + "'";
-						else i = i + " HeaderStatus eq '" + r[o] + "' or "
+						if (o === r.length - 1)
+							i = i + " HeaderStatus eq '" + r[o] + "'";
+						else
+							i = i + " HeaderStatus eq '" + r[o] + "' or ";
 					}
-					e = i
+					e = i;
 				}
 			}
 			if (e) this.readMasterListData(e, "F");
@@ -603,38 +607,38 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			this.tempDataFragment.EndDate = this.tempDataFragment.EndDate ? new Date(this.tempDataFragment.EndDate) : null;
 			var e = new sap.ui.model.json.JSONModel(this.tempDataFragment);
 			this.searchMasterFrag.setModel(e);
-			this.searchMasterFrag.close()
+			this.searchMasterFrag.close();
 		},
 		onAfterRendering: function () {
 			this.i18nModel = this.getView().getModel("i18n");
-			this.oModel = this.getView().getModel("TrackingODataModel")
+			this.oModel = this.getView().getModel("TrackingODataModel");
 		},
 		onLiveChangeSalesOrderFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 
 		onLiveChangeRefInvoiceFilter: function (e) {
 			var uiStateModel = this.getView().getModel("uiState");
 			var uiStateData = uiStateModel.getData();
-			uiStateData.visible = true;
+			uiStateData.visible = e.getParameters().value ? true : false;
 			uiStateModel.setData(uiStateData);
 
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 
 		onLiveChangeCustIdFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 		onLiveChangeSalesOrgFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 		onLiveChangeDistChanFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 		handleBack: function () {
 			var e = sap.ushell.Container.getService("CrossApplicationNavigation");
@@ -643,18 +647,18 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					semanticObject: "",
 					action: ""
 				}
-			})
+			});
 		},
 		onChangeDateRange: function (e) {
-			if (!e.mParameters.valid) {
+			if (!e.getParameters().valid) {
 				var t = this.searchMasterFrag.getModel().getData();
 				t.StartDate = null;
 				t.EndDate = null;
 				this.searchMasterFrag.getModel().refresh();
 				e.getSource().setValue("");
 				var a = this.i18nModel.getProperty("enterValidDateRange");
-				sap.m.MessageToast.show(a)
+				sap.m.MessageToast.show(a);
 			}
 		}
-	})
+	});
 });
