@@ -534,7 +534,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
 				//Start-Invoice Filter Enhancement
-				if (!t.SalesOrg || !t.DistChan || !t.Division ) {
+				if (!t.SalesOrg || !t.DistChan || !t.Division) {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
