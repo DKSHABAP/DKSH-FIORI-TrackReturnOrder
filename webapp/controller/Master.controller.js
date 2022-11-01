@@ -7,22 +7,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		formatter: u,
 		onInit: function () {
 			this.getRouter().getRoute("master").attachPatternMatched(this._onObjectMatched, this);
-			this.getLoggedInUserDetail();
-			this.getUiState();
-
+			this.getLoggedInUserDetail()
 		},
-		// Start Modification STRY0017413 - Additional Filter Fields for Invoice Search
-		getUiState: function () {
-
-			var uiStateModel = new sap.ui.model.json.JSONModel();
-			var uiStateData = {
-				visible: false
-			};
-			uiStateModel.setData(uiStateData);
-			this.getView().setModel(uiStateModel, "uiState");
-
-		},
-		// End  Modification STRY0017413 - Additional Filter Fields for Invoice Search			
 		_onObjectMatched: function (e) {
 			if (e.getParameter("name") === "master") {
 				if (sap.ui.Device.system.phone) {
@@ -385,12 +371,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				SalesOrder: "",
 				CustomerNo: "",
 				SelStatus: undefined,
-				SalesOrg: "",
-				DistChan: "",
-				Division: "",
 				StartDate: null,
 				EndDate: null
-
 			};
 			var t = new sap.ui.model.json.JSONModel(e);
 			this.searchMasterFrag.setModel(t);
@@ -404,20 +386,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		},
 		handleOkReadSoFilter: function () {
 			var e = "";
-			// var j = {
-			// 	SalesOrder: "",
-			// 	CustomerNo: "",
-			// 	SelStatus: undefined,
-			// 	SalesOrg: "",
-			// 	DistChan: "",
-			// 	Division: "",
-			// 	StartDate: null,
-			// 	EndDate: null
-
-			// };
 			var t = this.searchMasterFrag.getModel().getData();
-			//var t = new sap.ui.model.json.JSONModel(j);
-			//this.searchMasterFrag.setModel(t);
 			if (t.returnOrder && t.returnOrder.trim() !== "") {
 				e = "ReturnOrderNumber eq '" + t.returnOrder + "'"
 			}
@@ -442,26 +411,6 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				} else {
 					e = "Bname eq '" + t.Bname + "'"
 				}
-				// force creation date
-				if (t.StartDate === "" || t.StartDate === null) {
-					// var a = u.DateConversion(t.StartDate);
-					// var s = u.DateConversion(t.EndDate);
-					// if (e !== "") {
-					// 	e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
-					// } else {
-					// 	e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
-					// }
-
-					var today = new Date();
-					var endDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
-					var startDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7));
-					if (e !== "") {
-						e = e + " and (CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
-					} else {
-						e = "(CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
-					}
-				}
-
 			}
 
 			if (t.RefInvoice && t.RefInvoice.trim() !== "") {
@@ -470,39 +419,6 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				} else {
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
-				//Start-Invoice Filter Enhancement
-				if ( (t.RefInvoice !== "") && (t.SalesOrg === undefined || t.SalesOrg === "")||
-						(t.DistChan === undefined || t.DistChan === "" )||
-						(t.Division === undefined || t.Division === "" ) )  {
-					// var msg = this.i18nModel.getProperty("enterFilterSearch");
-					// sap.m.MessageToast.show(msg);
-					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
-					return false;
-				}
-
-				if (t.SalesOrg !== "" || t.SalesOrg !== null) {
-					e = e + " and SalesOrg eq '" + t.SalesOrg + "'";
-				} else {
-					e = "SalesOrg eq '" + t.SalesOrg + "'";
-
-				}
-
-				if (t.DistChan !== "" || t.DistChan !== null) {
-					e = e + " and DistChan eq '" + t.DistChan + "'";
-				} else {
-					e = "DistChan eq '" + t.DistChan + "'";
-
-				}
-
-				if (t.Division !== "" || t.Division !== null) {
-					e = e + " and Division eq '" + t.Division + "'";
-				} else {
-					e = "Division eq '" + e.Division + "'";
-
-				}
-
-				//End-Invoice Filter Enhancement
-
 			}
 			// [+] End modification - STRY0015013
 			if (t.CustomerPoNumber && t.CustomerPoNumber.trim() !== "") {
@@ -562,26 +478,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			e.getSource().setValue(e.getParameters().value.trim());
 			e.getSource().setTooltip(e.getParameters().value.trim())
 		},
-
-		onLiveChangeRefInvoiceFilter: function (e) {
-			var uiStateModel = this.getView().getModel("uiState");
-			var uiStateData = uiStateModel.getData();
-			uiStateData.visible = true;
-			uiStateModel.setData(uiStateData);
-
-			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
-		},
-
 		onLiveChangeCustIdFilter: function (e) {
-			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
-		},
-		onLiveChangeSalesOrgFilter: function (e) {
-			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
-		},
-		onLiveChangeDistChanFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
 			e.getSource().setTooltip(e.getParameters().value.trim())
 		},
