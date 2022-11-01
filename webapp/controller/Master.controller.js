@@ -426,6 +426,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		handleReadAllSOIntial: function () {
 			var oModel = this.getView().getModel().getData();
 			var oDSR = u.getDefaultDateRangeSelectionValues();
+			var uiStateModel = this.getView().getModel("uiState");
+			var uiStateData = uiStateModel.getData();			
 			var e = {
 				returnOrder: "",
 				CustomerNo: "",
@@ -459,6 +461,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			oModel.SelStatus = e.SelStatus;
 			oModel.StartDate = oDSR.dateValue;
 			oModel.EndDate = oDSR.secondDateValue;
+			uiStateData.visible = false;
+			uiStateModel.setData(uiStateData);
 			var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
 			this.readMasterListData(o, "");
 		},
@@ -534,7 +538,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
 				//Start-Invoice Filter Enhancement
-				if (!t.SalesOrg || !t.DistChan || !t.Division ) {
+				if (!t.SalesOrg || !t.DistChan || !t.Division) {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
@@ -629,7 +633,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		onLiveChangeRefInvoiceFilter: function (e) {
 			var uiStateModel = this.getView().getModel("uiState");
 			var uiStateData = uiStateModel.getData();
-			uiStateData.visible = true;
+			uiStateData.visible = e.getParameters().value.trim() ? true : false;
 			uiStateModel.setData(uiStateData);
 
 			e.getSource().setValue(e.getParameters().value.trim());
