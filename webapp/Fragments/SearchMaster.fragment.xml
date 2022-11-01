@@ -17,6 +17,14 @@
 					<Input tooltip="{/returnOrder}" value="{/returnOrder}" placeholder="{i18n>enter} {i18n&gt;rono}" maxLength="10" liveChange="onLiveChangeSalesOrderFilter"/>
 					<Label text="{i18n>customerIdFrag}" design="Bold"/>
 					<Input value="{/CustomerNo}" tooltip="{/CustomerNo}" placeholder="{i18n>enter} {i18n&gt;customerIdFrag}" maxLength="10" liveChange="onLiveChangeCustIdFilter"/>
+					<!--[+] Start Modification STRY0017413 - Additional Filter Fields for DMS-->
+					<Label text="{i18n>salesOrgFrag}" design="Bold"/>
+					<Input value="{/SalesOrg}" tooltip="{/SalesOrg}" placeholder="{i18n>enter} {i18n&gt;salesOrgFrag}" maxLength="30" liveChange="onLiveChangeSalesOrgFilter" visible="{uiState>/visible}" id="idSalesOrg" required="true"/>
+					<Label text="{i18n>distChanFrag}" design="Bold"/>
+					<Input value="{/DistChan}" tooltip="{/DistChan}" placeholder="{i18n>enter} {i18n&gt;distChanFrag}" maxLength="30" liveChange="onLiveChangeDistChanFilter" visible="{uiState>/visible}" id="idDistChan" required="true"/>
+					<Label text="{i18n>divisionFrag}" design="Bold"/>
+					<Input value="{/Division}" tooltip="{/Division}" placeholder="{i18n>enter} {i18n&gt;divisionFrag}" maxLength="30" liveChange="onLiveChangeDivisionFilter" visible="{uiState>/visible}" id="idDivision" required="true"/>
+					<!--[+] End Modification STRY0017413 - Additional Filter Fields for DMS-->
 					<!--[+] Start modification - STRY0015013 Local Ref No/Invoice Number Advance Filter-->
 					<Label text="{i18n>bnameFrag}" design="Bold"/>
 					<Input value="{/Bname}" tooltip="{/Bname}" placeholder="{i18n>enter} {i18n&gt;bnameFrag}" maxLength="30" liveChange="onLiveChangeBnameFilter"/>

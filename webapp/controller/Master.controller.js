@@ -7,8 +7,22 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		formatter: u,
 		onInit: function () {
 			this.getRouter().getRoute("master").attachPatternMatched(this._onObjectMatched, this);
-			this.getLoggedInUserDetail()
+			this.getLoggedInUserDetail();
+			this.getUiState();
+
 		},
+		// Start Modification STRY0017413 - Additional Filter Fields for Invoice Search
+		getUiState: function () {
+
+			var uiStateModel = new sap.ui.model.json.JSONModel();
+			var uiStateData = {
+				visible: false
+			};
+			uiStateModel.setData(uiStateData);
+			this.getView().setModel(uiStateModel, "uiState");
+
+		},
+		// End  Modification STRY0017413 - Additional Filter Fields for Invoice Search			
 		_onObjectMatched: function (e) {
 			if (e.getParameter("name") === "master") {
 				if (sap.ui.Device.system.phone) {
@@ -46,6 +60,24 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			return e
 		},
 		getLoggedInUserName: function (e) {
+			if (!this.getView().getModel()) {
+				var oModel = {
+					returnOrder: "",
+					CustomerNo: "",
+					SalesOrg: "",
+					DistChan: "",
+					Division: "",
+					Bname: "",
+					RefInvoice: "",
+					CustomerName: "",
+					CustomerPoNumber: "",
+					SelStatus: undefined,
+					StartDate: null,
+					EndDate: null
+				};
+				this.getView().setModel(new t(oModel));
+			}
+			var oDRS = u.getDefaultDateRangeSelectionValues();
 			// Start: STRY0014353 - Incident: Track Return Order (data access)
 			this.getView().setModel(new t(), "oLoggedInUserDetailModel");
 			this.getView().getModel("oLoggedInUserDetailModel").loadData("/DKSHJavaService2/userDetails/findAllRightsForUserInDomain/" +
@@ -59,10 +91,15 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					this.materialGroupDataAccess = (oData.ATR04) ? oData.ATR04 : "No Access";
 					this.materialGroup4DataAccess = (oData.ATR05) ? oData.ATR05 : "No Access";
 					this.custCodeDataAccess = (oData.ATR06) ? oData.ATR06 : "No Access";
-					var s = new Date;
-					var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
-					var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
+					var r = u.DateConversion(oDRS.secondDateValue);
+					var i = u.DateConversion(oDRS.dateValue);
 					var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
+					// Set defaults to the search fragment model properties
+					// if(oData.ATR01)	oModel.SalesOrg = oData.ATR01;
+					// if(oData.ATR02)	oModel.DistChan = oData.ATR02;
+					// if(oData.ATR03)	oModel.Division = oData.ATR02;
+					oModel.StartDate = oDRS.dateValue;
+					oModel.EndDate = oDRS.secondDateValue;
 					this.readMasterListData(o, "");
 				}
 			}.bind(this)).catch(function (oErr) {});
@@ -204,12 +241,17 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						var t = "";
 						if (e.statusCode === 504) {
 							t = "Request timed-out. Please try again!";
-							s.errorMsg(t)
+							s.errorMsg(t);
 						} else {
-							s.errorMsg("Data Not Found")
+							this.getView().getModel().refresh();
+							// s.errorMsg("Data Not Found");
+							if (!sap.ui.Device.system.phone) {
+								var p = sap.ui.core.UIComponent.getRouterFor(this);
+								p.navTo("notFound", true);
+							}
 						}
-					}
-				})
+					}.bind(this)
+				});
 			}
 		},
 		errorMsg: function (e) {
@@ -219,7 +261,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				title: "Error",
 				actions: [sap.m.MessageBox.Action.OK],
 				onClose: function (e) {}
-			})
+			});
 		},
 		handleFirstItemSetSelected: function (e) {
 			var t = this.getView().byId("ID_MASTER_LIST");
@@ -270,68 +312,81 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			})
 		},
 		onSearchMasterList: function (e) {
+			var oModel = this.getView().getModel().getData();
+			var oDSR = u.getDefaultDateRangeSelectionValues();
 			var t = this;
 			if (e.getParameters().refreshButtonPressed) {
-				var a = new Date;
+				var a = new Date();
 				var s = {
 					SalesOrder: "",
 					CustomerNo: "",
 					SelStatus: undefined,
-					StartDate: u.DateConversion(new Date(a.getFullYear(), a.getMonth(), a.getDate())),
-					EndDate: u.DateConversion(new Date(a.getFullYear(), a.getMonth(), a.getDate() - 7))
+					StartDate: u.DateConversion(oDSR.dateValue),
+					EndDate: u.DateConversion(oDSR.secondDateValue)
 				};
 				var r = JSON.stringify(s);
 				this.tempDataFragment = JSON.parse(r);
-				var i = "CreationDate le datetime'" + s.StartDate + "' and CreationDate ge datetime'" + s.EndDate + "'";
-				this.readMasterListData(i, "")
+				oModel.StartDate = oDSR.dateValue;
+				oModel.EndDate = oDSR.secondDateValue;
+				var i = "CreationDate le datetime'" + s.EndDate + "' and CreationDate ge datetime'" + s.StartDate + "'";
+				this.readMasterListData(i, "");
 			} else {
 				var o = e.getParameters().query;
-				var n = [];
-				var l = new sap.ui.model.Filter([new sap.ui.model.Filter("HeaderStatusDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model
-					.Filter("ConditionGroup5Desc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("ReturnOrderNumber", sap.ui.model
-						.FilterOperator.Contains, o), new sap.ui.model.Filter("TotalAmount", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model
-					.Filter("ReturnReasonDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator
-						.Contains, o), new sap.ui.model.Filter("CustomerCode", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
-						"CustomerName", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("CustomerPoNumber", sap.ui.model.FilterOperator
-						.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
-						"CreationDate", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("LinkedExchangeOrder", sap.ui.model.FilterOperator
-						.Contains, o)
-				]);
-				this.oSearchFilters = l;
-				var c = [];
-				if (this.oFilters && this.oFilters.length > 0) {
-					c = this.oFilters
-				}
-				var d = new sap.ui.model.Filter(c, false);
-				if (c.length > 0) {
-					var m = new sap.ui.model.Filter([l, d], true);
-					n.push(m)
+				var mModel = t.getView().getModel("masterDataModel");
+				if (!mModel || mModel.getData().results.length === 0) {
+					if (o && o.trim() !== "") {
+						var j = "ReturnOrderNumber eq '" + o + "'";
+						this.readMasterListData(j, "");
+					}
 				} else {
-					n.push(l)
-				}
-				var D = t.getView().byId("ID_MASTER_LIST").getBinding("items");
-				D.filter(n);
-				var g = t.i18nModel.getProperty("trackingDetailsMastPageTitle");
-				t.getView().byId("ID_MAST_PAGE").setTitle(g + " (" + D.getLength() + ")");
-				t.getView().byId("ID_MAST_PAGE").addStyleClass("title sapMIBar-CTX sapMTitle");
-				if (D.getLength() == 0 && !sap.ui.Device.system.phone) {
-					var p = sap.ui.core.UIComponent.getRouterFor(this);
-					p.navTo("notFound", true);
-					return
-				} else if (o.trim() == "" && !sap.ui.Device.system.phone) {
-					this.handleFirstItemSetSelected()
-				} else if (D.getLength() > 0 && !sap.ui.Device.system.phone) {
-					var h = t.getView().byId("ID_MASTER_LIST");
-					var v = this.getView().byId("ID_MASTER_LIST").getItems()[0].getBindingContext("masterDataModel").getObject();
-					h.getItems()[0].setSelected(true);
-					if (this.materialGroupDataAccess) v.materialGroupDataAccess = this.materialGroupDataAccess;
-					if (this.materialGroup4DataAccess) v.materialGroup4DataAccess = this.materialGroup4DataAccess;
-					sap.ui.getCore().setModel(v, "MasterModelSelData");
-					h.getItems()[0].setSelected(true);
-					var p = sap.ui.core.UIComponent.getRouterFor(this);
-					p.navTo("object", {
-						contextPath: v.ReturnOrderNumber
-					}, true)
+					var n = [];
+					var l = new sap.ui.model.Filter([new sap.ui.model.Filter("HeaderStatusDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui
+						.model
+						.Filter("ConditionGroup5Desc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("ReturnOrderNumber", sap.ui.model
+							.FilterOperator.Contains, o), new sap.ui.model.Filter("TotalAmount", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model
+						.Filter("ReturnReasonDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator
+							.Contains, o), new sap.ui.model.Filter("CustomerCode", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
+							"CustomerName", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("CustomerPoNumber", sap.ui.model.FilterOperator
+							.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
+							"CreationDate", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("LinkedExchangeOrder", sap.ui.model.FilterOperator
+							.Contains, o)
+					]);
+					this.oSearchFilters = l;
+					var c = [];
+					if (this.oFilters && this.oFilters.length > 0) {
+						c = this.oFilters;
+					}
+					var d = new sap.ui.model.Filter(c, false);
+					if (c.length > 0) {
+						var m = new sap.ui.model.Filter([l, d], true);
+						n.push(m);
+					} else {
+						n.push(l);
+					}
+					var D = t.getView().byId("ID_MASTER_LIST").getBinding("items");
+					D.filter(n);
+					var g = t.i18nModel.getProperty("trackingDetailsMastPageTitle");
+					t.getView().byId("ID_MAST_PAGE").setTitle(g + " (" + D.getLength() + ")");
+					t.getView().byId("ID_MAST_PAGE").addStyleClass("title sapMIBar-CTX sapMTitle");
+					if (D.getLength() == 0 && !sap.ui.Device.system.phone) {
+						var p = sap.ui.core.UIComponent.getRouterFor(this);
+						p.navTo("notFound", true);
+						return;
+					} else if (o.trim() == "" && !sap.ui.Device.system.phone) {
+						this.handleFirstItemSetSelected();
+					} else if (D.getLength() > 0 && !sap.ui.Device.system.phone) {
+						var h = t.getView().byId("ID_MASTER_LIST");
+						var v = this.getView().byId("ID_MASTER_LIST").getItems()[0].getBindingContext("masterDataModel").getObject();
+						h.getItems()[0].setSelected(true);
+						if (this.materialGroupDataAccess) v.materialGroupDataAccess = this.materialGroupDataAccess;
+						if (this.materialGroup4DataAccess) v.materialGroup4DataAccess = this.materialGroup4DataAccess;
+						sap.ui.getCore().setModel(v, "MasterModelSelData");
+						h.getItems()[0].setSelected(true);
+						var p = sap.ui.core.UIComponent.getRouterFor(this);
+						p.navTo("object", {
+							contextPath: v.ReturnOrderNumber
+						}, true);
+					}
 				}
 			}
 		},
@@ -350,43 +405,68 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					StartDate: null,
 					EndDate: null
 				};
-				a = s
+				a = s;
 			} else {
-				a = this.searchMasterFrag.getModel().getData()
+				a = this.searchMasterFrag.getModel().getData();
 			}
 			// var r = new sap.ui.model.json.JSONModel("FilterModel");
-			var r = new sap.ui.model.json.JSONModel(a);
+			// var r = new sap.ui.model.json.JSONModel(a);
+			var r = this.getView().getModel();
 			this.searchMasterFrag.setModel(r);
 			var i = JSON.stringify(a);
 			this.tempDataFragment = JSON.parse(i);
 			if (sap.ui.Device.system.desktop) {
-				this.searchMasterFrag.setContentWidth("50%")
+				this.searchMasterFrag.setContentWidth("50%");
 			} else {
-				this.searchMasterFrag.setContentWidth("100%")
+				this.searchMasterFrag.setContentWidth("100%");
 			}
-			this.searchMasterFrag.open()
+			this.searchMasterFrag.open();
 		},
 		handleReadAllSOIntial: function () {
+			var oModel = this.getView().getModel().getData();
+			var oDSR = u.getDefaultDateRangeSelectionValues();
 			var e = {
 				SalesOrder: "",
 				CustomerNo: "",
 				SelStatus: undefined,
+				SalesOrg: "",
+				DistChan: "",
+				Division: "",
 				StartDate: null,
 				EndDate: null
+
 			};
 			var t = new sap.ui.model.json.JSONModel(e);
 			this.searchMasterFrag.setModel(t);
 			var a = JSON.stringify(e);
 			this.tempDataFragment = JSON.parse(a);
-			var s = new Date;
-			var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
-			var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
+			var s = new Date();
+			var r = u.DateConversion(oDSR.secondDateValue);
+			var i = u.DateConversion(oDSR.dateValue);
+			oModel.StartDate = oDSR.dateValue;
+			oModel.EndDate = oDSR.secondDateValue;
 			var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
-			this.readMasterListData(o, "")
+			this.readMasterListData(o, "");
 		},
 		handleOkReadSoFilter: function () {
+			var oModel = this.getView().getModel().getData();
+			var oDSR = u.getDefaultDateRangeSelectionValues();
+			// debugger;
 			var e = "";
+			// var j = {
+			// 	SalesOrder: "",
+			// 	CustomerNo: "",
+			// 	SelStatus: undefined,
+			// 	SalesOrg: "",
+			// 	DistChan: "",
+			// 	Division: "",
+			// 	StartDate: null,
+			// 	EndDate: null
+
+			// };
 			var t = this.searchMasterFrag.getModel().getData();
+			//var t = new sap.ui.model.json.JSONModel(j);
+			//this.searchMasterFrag.setModel(t);
 			if (t.returnOrder && t.returnOrder.trim() !== "") {
 				e = "ReturnOrderNumber eq '" + t.returnOrder + "'"
 			}
@@ -411,6 +491,26 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				} else {
 					e = "Bname eq '" + t.Bname + "'"
 				}
+				// force creation date
+				if (t.StartDate === "" || t.StartDate === null) {
+					// var a = u.DateConversion(t.StartDate);
+					// var s = u.DateConversion(t.EndDate);
+					// if (e !== "") {
+					// 	e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					// } else {
+					// 	e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					// }
+
+					var today = new Date();
+					var endDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+					var startDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7));
+					if (e !== "") {
+						e = e + " and (CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
+					} else {
+						e = "(CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
+					}
+				}
+
 			}
 
 			if (t.RefInvoice && t.RefInvoice.trim() !== "") {
@@ -419,6 +519,39 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				} else {
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
+				//Start-Invoice Filter Enhancement
+				if (t.RefInvoice !== "" && t.SalesOrg === undefined ||
+					t.DistChan === undefined ||
+					t.Division === undefined) {
+					// var msg = this.i18nModel.getProperty("enterFilterSearch");
+					// sap.m.MessageToast.show(msg);
+					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
+					return false;
+				}
+
+				if (t.SalesOrg !== "" || t.SalesOrg !== null) {
+					e = e + " and SalesOrg eq '" + t.SalesOrg + "'";
+				} else {
+					e = "SalesOrg eq '" + t.SalesOrg + "'";
+
+				}
+
+				if (t.DistChan !== "" || t.DistChan !== null) {
+					e = e + " and DistChan eq '" + t.DistChan + "'";
+				} else {
+					e = "DistChan eq '" + t.DistChan + "'";
+
+				}
+
+				if (t.Division !== "" || t.Division !== null) {
+					e = e + " and Division eq '" + t.Division + "'";
+				} else {
+					e = "Division eq '" + e.Division + "'";
+
+				}
+
+				//End-Invoice Filter Enhancement
+
 			}
 			// [+] End modification - STRY0015013
 			if (t.CustomerPoNumber && t.CustomerPoNumber.trim() !== "") {
@@ -456,11 +589,13 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			}
 			if (e) this.readMasterListData(e, "F");
 			else {
-				var n = new Date;
-				var a = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate()));
-				var s = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate() - 7));
+				// var n = new Date;
+				var a = u.DateConversion(oDSR.secondDateValue);
+				var s = u.DateConversion(oDSR.dateValue);
+				oModel.StartDate = oDSR.dateValue;
+				oModel.EndDate = oDSR.secondDateValue;
 				var l = "CreationDate le datetime'" + a + "' and CreationDate ge datetime'" + s + "'";
-				this.readMasterListData(l, "")
+				this.readMasterListData(l, "");
 			}
 		},
 		handleCancelMasterSearch: function () {
@@ -478,7 +613,26 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			e.getSource().setValue(e.getParameters().value.trim());
 			e.getSource().setTooltip(e.getParameters().value.trim())
 		},
+
+		onLiveChangeRefInvoiceFilter: function (e) {
+			var uiStateModel = this.getView().getModel("uiState");
+			var uiStateData = uiStateModel.getData();
+			uiStateData.visible = true;
+			uiStateModel.setData(uiStateData);
+
+			e.getSource().setValue(e.getParameters().value.trim());
+			e.getSource().setTooltip(e.getParameters().value.trim())
+		},
+
 		onLiveChangeCustIdFilter: function (e) {
+			e.getSource().setValue(e.getParameters().value.trim());
+			e.getSource().setTooltip(e.getParameters().value.trim())
+		},
+		onLiveChangeSalesOrgFilter: function (e) {
+			e.getSource().setValue(e.getParameters().value.trim());
+			e.getSource().setTooltip(e.getParameters().value.trim())
+		},
+		onLiveChangeDistChanFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
 			e.getSource().setTooltip(e.getParameters().value.trim())
 		},
