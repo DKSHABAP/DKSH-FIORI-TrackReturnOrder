@@ -414,22 +414,29 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		handleReadAllSOIntial: function () {
 			var oModel = this.getView().getModel().getData();
 			var oDSR = u.getDefaultDateRangeSelectionValues();
-			var e = {
-				SalesOrder: "",
+			oModel = {
+				returnOrder: "",
 				CustomerNo: "",
+				SalesOrg: "",
+				DistChan: "",
+				Division: "",
+				Bname: "",
+				RefInvoice: "",
+				CustomerName: "",
+				CustomerPoNumber: "",
 				SelStatus: undefined,
 				StartDate: null,
 				EndDate: null
 			};
-			var t = new sap.ui.model.json.JSONModel(e);
-			this.searchMasterFrag.setModel(t);
-			var a = JSON.stringify(e);
+			oModel.StartDate = oDSR.dateValue;
+			oModel.EndDate = oDSR.secondDateValue;
+			// var t = new sap.ui.model.json.JSONModel(e);
+			// this.searchMasterFrag.setModel(t);
+			var a = JSON.stringify(oModel);
 			this.tempDataFragment = JSON.parse(a);
 			var s = new Date();
 			var r = u.DateConversion(oDSR.secondDateValue);
 			var i = u.DateConversion(oDSR.dateValue);
-			oModel.StartDate = oDSR.dateValue;
-			oModel.EndDate = oDSR.secondDateValue;
 			var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
 			this.readMasterListData(o, "");
 		},
