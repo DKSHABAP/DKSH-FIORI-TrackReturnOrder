@@ -245,6 +245,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						} else {
 							this.getView().getModel().refresh();
 							// s.errorMsg("Data Not Found");
+							if (s.searchMasterFrag) s.searchMasterFrag.close();
 							if (!sap.ui.Device.system.phone) {
 								var p = sap.ui.core.UIComponent.getRouterFor(this);
 								p.navTo("notFound", true);
@@ -426,15 +427,18 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var oModel = this.getView().getModel().getData();
 			var oDSR = u.getDefaultDateRangeSelectionValues();
 			var e = {
-				SalesOrder: "",
+				returnOrder: "",
 				CustomerNo: "",
-				SelStatus: undefined,
 				SalesOrg: "",
 				DistChan: "",
 				Division: "",
-				StartDate: null,
-				EndDate: null
-
+				Bname: "",
+				RefInvoice: "",
+				CustomerName: "",
+				CustomerPoNumber: "",
+				SelStatus: undefined,
+				StartDate: oDSR.dateValue,
+				EndDate: oDSR.secondDateValue
 			};
 			var t = new sap.ui.model.json.JSONModel(e);
 			this.searchMasterFrag.setModel(t);
@@ -443,6 +447,16 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var s = new Date();
 			var r = u.DateConversion(oDSR.secondDateValue);
 			var i = u.DateConversion(oDSR.dateValue);
+			oModel.returnOrder = e.returnOrder;
+			oModel.CustomerNo = e.CustomerNo;
+			oModel.SalesOrg = e.SalesOrg;
+			oModel.DistChan = e.DistChan;
+			oModel.Division = e.Division;
+			oModel.Bname = e.Bname;
+			oModel.RefInvoice = e.RefInvoice;
+			oModel.CustomerName = e.CustomerName;
+			oModel.CustomerPoNumber = e.CustomerPoNumber;
+			oModel.SelStatus = e.SelStatus;
 			oModel.StartDate = oDSR.dateValue;
 			oModel.EndDate = oDSR.secondDateValue;
 			var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
@@ -520,9 +534,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
 				//Start-Invoice Filter Enhancement
-				if (t.RefInvoice !== "" && t.SalesOrg === undefined ||
-					t.DistChan === undefined ||
-					t.Division === undefined) {
+				if !(t.SalesOrg && t.DistChan && t.Division) {
 					// var msg = this.i18nModel.getProperty("enterFilterSearch");
 					// sap.m.MessageToast.show(msg);
 					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
