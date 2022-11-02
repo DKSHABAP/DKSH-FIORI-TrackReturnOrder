@@ -310,61 +310,53 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				this.readMasterListData(i, "")
 			} else {
 				var o = e.getParameters().query;
-				var mModel = t.getView().getModel("masterDataModel");
-				if (!mModel || mModel.getData().results.length === 0) {
-					if (o && o.trim() !== "") {
-						var j = "ReturnOrderNumber eq '" + o + "'";
-						this.readMasterListData(j, "");
-					}
+				var n = [];
+				var l = new sap.ui.model.Filter([new sap.ui.model.Filter("HeaderStatusDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui
+					.model
+					.Filter("ConditionGroup5Desc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("ReturnOrderNumber", sap.ui.model
+						.FilterOperator.Contains, o), new sap.ui.model.Filter("TotalAmount", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model
+					.Filter("ReturnReasonDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator
+						.Contains, o), new sap.ui.model.Filter("CustomerCode", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
+						"CustomerName", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("CustomerPoNumber", sap.ui.model.FilterOperator
+						.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
+						"CreationDate", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("LinkedExchangeOrder", sap.ui.model.FilterOperator
+						.Contains, o)
+				]);
+				this.oSearchFilters = l;
+				var c = [];
+				if (this.oFilters && this.oFilters.length > 0) {
+					c = this.oFilters;
+				}
+				var d = new sap.ui.model.Filter(c, false);
+				if (c.length > 0) {
+					var m = new sap.ui.model.Filter([l, d], true);
+					n.push(m);
 				} else {
-					var n = [];
-					var l = new sap.ui.model.Filter([new sap.ui.model.Filter("HeaderStatusDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui
-						.model
-						.Filter("ConditionGroup5Desc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("ReturnOrderNumber", sap.ui.model
-							.FilterOperator.Contains, o), new sap.ui.model.Filter("TotalAmount", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model
-						.Filter("ReturnReasonDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator
-							.Contains, o), new sap.ui.model.Filter("CustomerCode", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
-							"CustomerName", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("CustomerPoNumber", sap.ui.model.FilterOperator
-							.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter(
-							"CreationDate", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("LinkedExchangeOrder", sap.ui.model.FilterOperator
-							.Contains, o)
-					]);
-					this.oSearchFilters = l;
-					var c = [];
-					if (this.oFilters && this.oFilters.length > 0) {
-						c = this.oFilters;
-					}
-					var d = new sap.ui.model.Filter(c, false);
-					if (c.length > 0) {
-						var m = new sap.ui.model.Filter([l, d], true);
-						n.push(m);
-					} else {
-						n.push(l);
-					}
-					var D = t.getView().byId("ID_MASTER_LIST").getBinding("items");
-					D.filter(n);
-					var g = t.i18nModel.getProperty("trackingDetailsMastPageTitle");
-					t.getView().byId("ID_MAST_PAGE").setTitle(g + " (" + D.getLength() + ")");
-					t.getView().byId("ID_MAST_PAGE").addStyleClass("title sapMIBar-CTX sapMTitle");
-					if (D.getLength() == 0 && !sap.ui.Device.system.phone) {
-						var p = sap.ui.core.UIComponent.getRouterFor(this);
-						p.navTo("notFound", true);
-						return;
-					} else if (o.trim() == "" && !sap.ui.Device.system.phone) {
-						this.handleFirstItemSetSelected();
-					} else if (D.getLength() > 0 && !sap.ui.Device.system.phone) {
-						var h = t.getView().byId("ID_MASTER_LIST");
-						var v = this.getView().byId("ID_MASTER_LIST").getItems()[0].getBindingContext("masterDataModel").getObject();
-						h.getItems()[0].setSelected(true);
-						if (this.materialGroupDataAccess) v.materialGroupDataAccess = this.materialGroupDataAccess;
-						if (this.materialGroup4DataAccess) v.materialGroup4DataAccess = this.materialGroup4DataAccess;
-						sap.ui.getCore().setModel(v, "MasterModelSelData");
-						h.getItems()[0].setSelected(true);
-						var p = sap.ui.core.UIComponent.getRouterFor(this);
-						p.navTo("object", {
-							contextPath: v.ReturnOrderNumber
-						}, true);
-					}
+					n.push(l);
+				}
+				var D = t.getView().byId("ID_MASTER_LIST").getBinding("items");
+				D.filter(n);
+				var g = t.i18nModel.getProperty("trackingDetailsMastPageTitle");
+				t.getView().byId("ID_MAST_PAGE").setTitle(g + " (" + D.getLength() + ")");
+				t.getView().byId("ID_MAST_PAGE").addStyleClass("title sapMIBar-CTX sapMTitle");
+				if (D.getLength() == 0 && !sap.ui.Device.system.phone) {
+					var p = sap.ui.core.UIComponent.getRouterFor(this);
+					p.navTo("notFound", true);
+					return;
+				} else if (o.trim() == "" && !sap.ui.Device.system.phone) {
+					this.handleFirstItemSetSelected();
+				} else if (D.getLength() > 0 && !sap.ui.Device.system.phone) {
+					var h = t.getView().byId("ID_MASTER_LIST");
+					var v = this.getView().byId("ID_MASTER_LIST").getItems()[0].getBindingContext("masterDataModel").getObject();
+					h.getItems()[0].setSelected(true);
+					if (this.materialGroupDataAccess) v.materialGroupDataAccess = this.materialGroupDataAccess;
+					if (this.materialGroup4DataAccess) v.materialGroup4DataAccess = this.materialGroup4DataAccess;
+					sap.ui.getCore().setModel(v, "MasterModelSelData");
+					h.getItems()[0].setSelected(true);
+					var p = sap.ui.core.UIComponent.getRouterFor(this);
+					p.navTo("object", {
+						contextPath: v.ReturnOrderNumber
+					}, true);
 				}
 			}
 		},
@@ -401,7 +393,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		},
 		handleReadAllSOIntial: function () {
 			var uiStateModel = this.getView().getModel("uiState");
-			var uiStateData = uiStateModel.getData();			
+			var uiStateData = uiStateModel.getData();
 			var e = {
 				returnOrder: "",
 				CustomerNo: "",
