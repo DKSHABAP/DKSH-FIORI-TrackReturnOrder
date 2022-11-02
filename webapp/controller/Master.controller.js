@@ -60,24 +60,6 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			return e
 		},
 		getLoggedInUserName: function (e) {
-			if (!this.getView().getModel()) {
-				var oModel = {
-					returnOrder: "",
-					CustomerNo: "",
-					SalesOrg: "",
-					DistChan: "",
-					Division: "",
-					Bname: "",
-					RefInvoice: "",
-					CustomerName: "",
-					CustomerPoNumber: "",
-					SelStatus: undefined,
-					StartDate: null,
-					EndDate: null
-				};
-				this.getView().setModel(new t(oModel));
-			}
-			var oDRS = u.getDefaultDateRangeSelectionValues();
 			// Start: STRY0014353 - Incident: Track Return Order (data access)
 			this.getView().setModel(new t(), "oLoggedInUserDetailModel");
 			this.getView().getModel("oLoggedInUserDetailModel").loadData("/DKSHJavaService2/userDetails/findAllRightsForUserInDomain/" +
@@ -91,15 +73,14 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					this.materialGroupDataAccess = (oData.ATR04) ? oData.ATR04 : "No Access";
 					this.materialGroup4DataAccess = (oData.ATR05) ? oData.ATR05 : "No Access";
 					this.custCodeDataAccess = (oData.ATR06) ? oData.ATR06 : "No Access";
-					var r = u.DateConversion(oDRS.secondDateValue);
-					var i = u.DateConversion(oDRS.dateValue);
+					var s = new Date;
+					var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
+					var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
 					var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
 					// Set defaults to the search fragment model properties
 					// if(oData.ATR01)	oModel.SalesOrg = oData.ATR01;
 					// if(oData.ATR02)	oModel.DistChan = oData.ATR02;
 					// if(oData.ATR03)	oModel.Division = oData.ATR02;
-					oModel.StartDate = oDRS.dateValue;
-					oModel.EndDate = oDRS.secondDateValue;
 					this.readMasterListData(o, "");
 				}
 			}.bind(this)).catch(function (oErr) {});
@@ -313,8 +294,6 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			})
 		},
 		onSearchMasterList: function (e) {
-			var oModel = this.getView().getModel().getData();
-			var oDSR = u.getDefaultDateRangeSelectionValues();
 			var t = this;
 			if (e.getParameters().refreshButtonPressed) {
 				var a = new Date();
@@ -322,15 +301,13 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					SalesOrder: "",
 					CustomerNo: "",
 					SelStatus: undefined,
-					StartDate: u.DateConversion(oDSR.dateValue),
-					EndDate: u.DateConversion(oDSR.secondDateValue)
+					StartDate: u.DateConversion(new Date(a.getFullYear(), a.getMonth(), a.getDate())),
+					EndDate: u.DateConversion(new Date(a.getFullYear(), a.getMonth(), a.getDate() - 7))
 				};
 				var r = JSON.stringify(s);
 				this.tempDataFragment = JSON.parse(r);
-				oModel.StartDate = oDSR.dateValue;
-				oModel.EndDate = oDSR.secondDateValue;
-				var i = "CreationDate le datetime'" + s.EndDate + "' and CreationDate ge datetime'" + s.StartDate + "'";
-				this.readMasterListData(i, "");
+				var i = "CreationDate le datetime'" + s.StartDate + "' and CreationDate ge datetime'" + s.EndDate + "'";
+				this.readMasterListData(i, "")
 			} else {
 				var o = e.getParameters().query;
 				var mModel = t.getView().getModel("masterDataModel");
@@ -411,8 +388,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				a = this.searchMasterFrag.getModel().getData();
 			}
 			// var r = new sap.ui.model.json.JSONModel("FilterModel");
-			// var r = new sap.ui.model.json.JSONModel(a);
-			var r = this.getView().getModel();
+			var r = new sap.ui.model.json.JSONModel(a);
 			this.searchMasterFrag.setModel(r);
 			var i = JSON.stringify(a);
 			this.tempDataFragment = JSON.parse(i);
@@ -424,8 +400,6 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			this.searchMasterFrag.open();
 		},
 		handleReadAllSOIntial: function () {
-			var oModel = this.getView().getModel().getData();
-			var oDSR = u.getDefaultDateRangeSelectionValues();
 			var uiStateModel = this.getView().getModel("uiState");
 			var uiStateData = uiStateModel.getData();			
 			var e = {
@@ -439,36 +413,20 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				CustomerName: "",
 				CustomerPoNumber: "",
 				SelStatus: undefined,
-				StartDate: oDSR.dateValue,
-				EndDate: oDSR.secondDateValue
+				StartDate: null,
+				EndDate: null
 			};
 			var t = new sap.ui.model.json.JSONModel(e);
 			this.searchMasterFrag.setModel(t);
 			var a = JSON.stringify(e);
 			this.tempDataFragment = JSON.parse(a);
-			var s = new Date();
-			var r = u.DateConversion(oDSR.secondDateValue);
-			var i = u.DateConversion(oDSR.dateValue);
-			oModel.returnOrder = e.returnOrder;
-			oModel.CustomerNo = e.CustomerNo;
-			oModel.SalesOrg = e.SalesOrg;
-			oModel.DistChan = e.DistChan;
-			oModel.Division = e.Division;
-			oModel.Bname = e.Bname;
-			oModel.RefInvoice = e.RefInvoice;
-			oModel.CustomerName = e.CustomerName;
-			oModel.CustomerPoNumber = e.CustomerPoNumber;
-			oModel.SelStatus = e.SelStatus;
-			oModel.StartDate = oDSR.dateValue;
-			oModel.EndDate = oDSR.secondDateValue;
-			uiStateData.visible = false;
-			uiStateModel.setData(uiStateData);
+			var s = new Date;
+			var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
+			var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
 			var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
-			this.readMasterListData(o, "");
+			this.readMasterListData(o, "")
 		},
 		handleOkReadSoFilter: function () {
-			var oModel = this.getView().getModel().getData();
-			var oDSR = u.getDefaultDateRangeSelectionValues();
 			// debugger;
 			var e = "";
 			// var j = {
@@ -605,13 +563,11 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			}
 			if (e) this.readMasterListData(e, "F");
 			else {
-				// var n = new Date;
-				var a = u.DateConversion(oDSR.secondDateValue);
-				var s = u.DateConversion(oDSR.dateValue);
-				oModel.StartDate = oDSR.dateValue;
-				oModel.EndDate = oDSR.secondDateValue;
+				var n = new Date;
+				var a = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate()));
+				var s = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate() - 7));
 				var l = "CreationDate le datetime'" + a + "' and CreationDate ge datetime'" + s + "'";
-				this.readMasterListData(l, "");
+				this.readMasterListData(l, "")
 			}
 		},
 		handleCancelMasterSearch: function () {

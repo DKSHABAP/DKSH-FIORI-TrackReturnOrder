@@ -458,21 +458,6 @@ sap.ui.define([], function () {
 		blurNValue: function (e) {
 			if (e != "B") return true;
 			return false;
-		},
-		
-		/** 
-		 * Get default date range selection values
-		 * @returns dateValue Date From date
-		 * @returns secondDateValue Date To date
-		 */
-		getDefaultDateRangeSelectionValues: function () {
-			var secondDateValue = new Date();
-			var dateValue = new Date();
-			dateValue.setDate(dateValue.getDate() - 7);
-			return {
-				dateValue: dateValue,
-				secondDateValue: secondDateValue
-			};
 		}
 	};
 });
