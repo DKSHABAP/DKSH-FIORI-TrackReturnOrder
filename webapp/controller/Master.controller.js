@@ -7,8 +7,22 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		formatter: u,
 		onInit: function () {
 			this.getRouter().getRoute("master").attachPatternMatched(this._onObjectMatched, this);
-			this.getLoggedInUserDetail()
+			this.getLoggedInUserDetail();
+			this.getUiState();
+
 		},
+		// Start Modification STRY0017413 - Additional Filter Fields for Invoice Search
+		getUiState: function () {
+
+			var uiStateModel = new sap.ui.model.json.JSONModel();
+			var uiStateData = {
+				visible: false
+			};
+			uiStateModel.setData(uiStateData);
+			this.getView().setModel(uiStateModel, "uiState");
+
+		},
+		// End  Modification STRY0017413 - Additional Filter Fields for Invoice Search			
 		_onObjectMatched: function (e) {
 			if (e.getParameter("name") === "master") {
 				if (sap.ui.Device.system.phone) {
@@ -63,6 +77,10 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
 					var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
 					var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
+					// Set defaults to the search fragment model properties
+					// if(oData.ATR01)	oModel.SalesOrg = oData.ATR01;
+					// if(oData.ATR02)	oModel.DistChan = oData.ATR02;
+					// if(oData.ATR03)	oModel.Division = oData.ATR02;
 					this.readMasterListData(o, "");
 				}
 			}.bind(this)).catch(function (oErr) {});
@@ -204,12 +222,18 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						var t = "";
 						if (e.statusCode === 504) {
 							t = "Request timed-out. Please try again!";
-							s.errorMsg(t)
+							s.errorMsg(t);
 						} else {
-							s.errorMsg("Data Not Found")
+							this.getView().getModel().refresh();
+							// s.errorMsg("Data Not Found");
+							if (s.searchMasterFrag) s.searchMasterFrag.close();
+							if (!sap.ui.Device.system.phone) {
+								var p = sap.ui.core.UIComponent.getRouterFor(this);
+								p.navTo("notFound", true);
+							}
 						}
-					}
-				})
+					}.bind(this)
+				});
 			}
 		},
 		errorMsg: function (e) {
@@ -219,7 +243,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				title: "Error",
 				actions: [sap.m.MessageBox.Action.OK],
 				onClose: function (e) {}
-			})
+			});
 		},
 		handleFirstItemSetSelected: function (e) {
 			var t = this.getView().byId("ID_MASTER_LIST");
@@ -272,7 +296,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 		onSearchMasterList: function (e) {
 			var t = this;
 			if (e.getParameters().refreshButtonPressed) {
-				var a = new Date;
+				var a = new Date();
 				var s = {
 					SalesOrder: "",
 					CustomerNo: "",
@@ -287,7 +311,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			} else {
 				var o = e.getParameters().query;
 				var n = [];
-				var l = new sap.ui.model.Filter([new sap.ui.model.Filter("HeaderStatusDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model
+				var l = new sap.ui.model.Filter([new sap.ui.model.Filter("HeaderStatusDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui
+					.model
 					.Filter("ConditionGroup5Desc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("ReturnOrderNumber", sap.ui.model
 						.FilterOperator.Contains, o), new sap.ui.model.Filter("TotalAmount", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model
 					.Filter("ReturnReasonDesc", sap.ui.model.FilterOperator.Contains, o), new sap.ui.model.Filter("RefInvoice", sap.ui.model.FilterOperator
@@ -300,14 +325,14 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				this.oSearchFilters = l;
 				var c = [];
 				if (this.oFilters && this.oFilters.length > 0) {
-					c = this.oFilters
+					c = this.oFilters;
 				}
 				var d = new sap.ui.model.Filter(c, false);
 				if (c.length > 0) {
 					var m = new sap.ui.model.Filter([l, d], true);
-					n.push(m)
+					n.push(m);
 				} else {
-					n.push(l)
+					n.push(l);
 				}
 				var D = t.getView().byId("ID_MASTER_LIST").getBinding("items");
 				D.filter(n);
@@ -317,9 +342,9 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				if (D.getLength() == 0 && !sap.ui.Device.system.phone) {
 					var p = sap.ui.core.UIComponent.getRouterFor(this);
 					p.navTo("notFound", true);
-					return
+					return;
 				} else if (o.trim() == "" && !sap.ui.Device.system.phone) {
-					this.handleFirstItemSetSelected()
+					this.handleFirstItemSetSelected();
 				} else if (D.getLength() > 0 && !sap.ui.Device.system.phone) {
 					var h = t.getView().byId("ID_MASTER_LIST");
 					var v = this.getView().byId("ID_MASTER_LIST").getItems()[0].getBindingContext("masterDataModel").getObject();
@@ -331,7 +356,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					var p = sap.ui.core.UIComponent.getRouterFor(this);
 					p.navTo("object", {
 						contextPath: v.ReturnOrderNumber
-					}, true)
+					}, true);
 				}
 			}
 		},
@@ -350,9 +375,9 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					StartDate: null,
 					EndDate: null
 				};
-				a = s
+				a = s;
 			} else {
-				a = this.searchMasterFrag.getModel().getData()
+				a = this.searchMasterFrag.getModel().getData();
 			}
 			// var r = new sap.ui.model.json.JSONModel("FilterModel");
 			var r = new sap.ui.model.json.JSONModel(a);
@@ -360,16 +385,25 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var i = JSON.stringify(a);
 			this.tempDataFragment = JSON.parse(i);
 			if (sap.ui.Device.system.desktop) {
-				this.searchMasterFrag.setContentWidth("50%")
+				this.searchMasterFrag.setContentWidth("50%");
 			} else {
-				this.searchMasterFrag.setContentWidth("100%")
+				this.searchMasterFrag.setContentWidth("100%");
 			}
-			this.searchMasterFrag.open()
+			this.searchMasterFrag.open();
 		},
 		handleReadAllSOIntial: function () {
+			var uiStateModel = this.getView().getModel("uiState");
+			var uiStateData = uiStateModel.getData();
 			var e = {
-				SalesOrder: "",
+				returnOrder: "",
 				CustomerNo: "",
+				SalesOrg: "",
+				DistChan: "",
+				Division: "",
+				Bname: "",
+				RefInvoice: "",
+				CustomerName: "",
+				CustomerPoNumber: "",
 				SelStatus: undefined,
 				StartDate: null,
 				EndDate: null
@@ -385,8 +419,22 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			this.readMasterListData(o, "")
 		},
 		handleOkReadSoFilter: function () {
+			// debugger;
 			var e = "";
+			// var j = {
+			// 	SalesOrder: "",
+			// 	CustomerNo: "",
+			// 	SelStatus: undefined,
+			// 	SalesOrg: "",
+			// 	DistChan: "",
+			// 	Division: "",
+			// 	StartDate: null,
+			// 	EndDate: null
+
+			// };
 			var t = this.searchMasterFrag.getModel().getData();
+			//var t = new sap.ui.model.json.JSONModel(j);
+			//this.searchMasterFrag.setModel(t);
 			if (t.returnOrder && t.returnOrder.trim() !== "") {
 				e = "ReturnOrderNumber eq '" + t.returnOrder + "'"
 			}
@@ -411,6 +459,26 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				} else {
 					e = "Bname eq '" + t.Bname + "'"
 				}
+				// force creation date
+				if (t.StartDate === "" || t.StartDate === null) {
+					// var a = u.DateConversion(t.StartDate);
+					// var s = u.DateConversion(t.EndDate);
+					// if (e !== "") {
+					// 	e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					// } else {
+					// 	e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					// }
+
+					var today = new Date();
+					var endDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+					var startDate = u.DateConversion(new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7));
+					if (e !== "") {
+						e = e + " and (CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
+					} else {
+						e = "(CreationDate le datetime'" + endDate + "' and CreationDate ge datetime'" + startDate + "')";
+					}
+				}
+
 			}
 
 			if (t.RefInvoice && t.RefInvoice.trim() !== "") {
@@ -419,6 +487,37 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				} else {
 					e = "RefInvoice eq '" + t.RefInvoice + "'"
 				}
+				//Start-Invoice Filter Enhancement
+				if (!t.SalesOrg || !t.DistChan || !t.Division) {
+					// var msg = this.i18nModel.getProperty("enterFilterSearch");
+					// sap.m.MessageToast.show(msg);
+					sap.m.MessageBox.information(this.getView().getModel("i18n").getProperty("enterFilterSearch"));
+					return false;
+				}
+
+				if (t.SalesOrg !== "" || t.SalesOrg !== null) {
+					e = e + " and SalesOrg eq '" + t.SalesOrg + "'";
+				} else {
+					e = "SalesOrg eq '" + t.SalesOrg + "'";
+
+				}
+
+				if (t.DistChan !== "" || t.DistChan !== null) {
+					e = e + " and DistChan eq '" + t.DistChan + "'";
+				} else {
+					e = "DistChan eq '" + t.DistChan + "'";
+
+				}
+
+				if (t.Division !== "" || t.Division !== null) {
+					e = e + " and Division eq '" + t.Division + "'";
+				} else {
+					e = "Division eq '" + e.Division + "'";
+
+				}
+
+				//End-Invoice Filter Enhancement
+
 			}
 			// [+] End modification - STRY0015013
 			if (t.CustomerPoNumber && t.CustomerPoNumber.trim() !== "") {
@@ -478,7 +577,26 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			e.getSource().setValue(e.getParameters().value.trim());
 			e.getSource().setTooltip(e.getParameters().value.trim())
 		},
+
+		onLiveChangeRefInvoiceFilter: function (e) {
+			var uiStateModel = this.getView().getModel("uiState");
+			var uiStateData = uiStateModel.getData();
+			uiStateData.visible = e.getParameters().value.trim() ? true : false;
+			uiStateModel.setData(uiStateData);
+
+			e.getSource().setValue(e.getParameters().value.trim());
+			e.getSource().setTooltip(e.getParameters().value.trim())
+		},
+
 		onLiveChangeCustIdFilter: function (e) {
+			e.getSource().setValue(e.getParameters().value.trim());
+			e.getSource().setTooltip(e.getParameters().value.trim())
+		},
+		onLiveChangeSalesOrgFilter: function (e) {
+			e.getSource().setValue(e.getParameters().value.trim());
+			e.getSource().setTooltip(e.getParameters().value.trim())
+		},
+		onLiveChangeDistChanFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
 			e.getSource().setTooltip(e.getParameters().value.trim())
 		},
