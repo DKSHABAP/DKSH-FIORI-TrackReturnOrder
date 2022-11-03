@@ -222,17 +222,11 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						var t = "";
 						if (e.statusCode === 504) {
 							t = "Request timed-out. Please try again!";
-							s.errorMsg(t);
+							s.errorMsg(t)
 						} else {
-							this.getView().getModel().refresh();
-							// s.errorMsg("Data Not Found");
-							if (s.searchMasterFrag) s.searchMasterFrag.close();
-							if (!sap.ui.Device.system.phone) {
-								var p = sap.ui.core.UIComponent.getRouterFor(this);
-								p.navTo("notFound", true);
-							}
+							s.errorMsg("Data Not Found")
 						}
-					}.bind(this)
+					}
 				});
 			}
 		},
