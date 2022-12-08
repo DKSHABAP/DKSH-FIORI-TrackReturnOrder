@@ -13,7 +13,7 @@
 			<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="true" labelSpanL="3" labelSpanM="3" emptySpanL="1" emptySpanM="1" columnsL="1" columnsM="1" class="sapUiSizeCompact simplFormPaddCls">
 				<f:content>
 					<core:Title/>
-					<Label text="Return Order No." design="Bold"/>
+					<Label text="{i18n>ReturnOrderNo}" design="Bold"/>
 					<Input tooltip="{/returnOrder}" value="{/returnOrder}" placeholder="{i18n>enter} {i18n&gt;rono}" maxLength="10" liveChange="onLiveChangeSalesOrderFilter"/>
 					<Label text="{i18n>customerIdFrag}" design="Bold"/>
 					<Input value="{/CustomerNo}" tooltip="{/CustomerNo}" placeholder="{i18n>enter} {i18n&gt;customerIdFrag}" maxLength="10" liveChange="onLiveChangeCustIdFilter"/>
@@ -31,7 +31,7 @@
 					<Label text="{i18n>refInvFrag}" design="Bold"/>
 					<Input value="{/RefInvoice}" tooltip="{/RefInvoice}" placeholder="{i18n>enter} {i18n&gt;refInvFrag}" maxLength="10" liveChange="onLiveChangeRefInvoiceFilter"/>
 					<!--[+] End modification - STRY0015013 Local Ref No/Invoice Number Advance Filter-->
-					<Label text="Sold-to-party Name" design="Bold"/>
+					<Label text="{i18n>SoldtopartyName}" design="Bold"/>
 					<Input value="{/CustomerName}" tooltip="{/CustomerName}" placeholder="{i18n>enter} {i18n&gt;customerIdFrag} {i18n>name}" liveChange="onLiveChangeCustIdFilter"/>
 					<Label text="{i18n>statusFrag}" design="Bold"/>
 					<Label text="{i18n>ponumber}" design="Bold"/>
