@@ -24,12 +24,21 @@
 									<Label text="{masterDataModel>HeaderStatusDesc}" design="Bold"/>
 								</HBox>
 								<Label text="{masterDataModel>ConditionGroup5Desc}" design="Bold"/>
+							<!--[+] delete - STRY0015850	
 								<Text text="{masterDataModel>ReturnOrderNumber} {masterDataModel>TotalAmount}({masterDataModel>Currency})" class="sapUiTinyMarginBegin"
 									visible="{path:'masterDataModel>Blur',formatter:'.formatter.blurNValue'}"/>
 								<HBox visible="{path:'masterDataModel>Blur',formatter:'.formatter.blurValue'}" class="sapUiTinyMarginBegin">
 									<Text text="{masterDataModel>ReturnOrderNumber}"/>
 									<Text text="@@@@ @@@@" class="blurText"/>
 								</HBox>
+							--><!-- end delete - STRY0015850 -->
+							<!--[+] add - STRY0015850 -->
+								<HBox>
+									<Text text="{masterDataModel>ReturnOrderNumber}" />
+									<Text text="{parts:[{path:'masterDataModel>TotalAmount'}],formatter:'.formatter.addCommas'} ({masterDataModel>Currency})" 
+										class="sapUiTinyMarginBegin" visible="{path:'masterDataModel>Blur',formatter:'.formatter.hideBlur'}"/>
+								</HBox>	
+							<!-- end add - STRY0015850 -->
 								<Text text="{masterDataModel>ReturnReasonDesc}" class="sapUiTinyMarginBegin"/>
 								<Text text="Ref. Invoice No.: {masterDataModel>RefInvoice}" class="sapUiTinyMarginBegin"/>
 								<Text text="{masterDataModel>CustomerCode} - {masterDataModel>CustomerName}" tooltip="{masterDataModel>CustId} - {masterDataModel>CustName}"

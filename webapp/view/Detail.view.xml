@@ -228,22 +228,38 @@
 							</items>
 						</SegmentedButton>
 						<OverflowToolbar visible="{oNewModel>/firstlist}">
+						<!-- [+] delete - STRY0015850	
 							<HBox>
 								<Label text="Return Sub Total:"/>
 								<Label text="{parts:['OrderListSet>/returnTotal','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}" design="Bold"
 									visible="{path:'OrderListSet>/returnsBlur',formatter:'.formatter.blurNValue'}"></Label>
 								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'OrderListSet>/returnsBlur',formatter:'.formatter.blurValue'}"></Label>
 							</HBox>
+						--><!-- [+] end delete - STRY0015850 -->
+						<!-- [+] add - STRY0015850 -->
+							<HBox>
+								<Label text="{i18n>retSubTotal}" visible="{path:'OrderListSet>/returnsBlur', formatter:'.formatter.hideBlur'}" />
+								<Label text="{path:'OrderListSet>/returnTotal', formatter:'.formatter.addCommas'} 
+											{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}" 
+									design="Bold" visible="{path:'OrderListSet>/returnsBlur', formatter:'.formatter.hideBlur'}" />
+							</HBox>
+						<!-- [+] end add - STRY0015850 -->
 							<ToolbarSpacer></ToolbarSpacer>
+						<!--[+] delete - STRY0015850	
 							<ObjectStatus text="Return Items: {OrderListSet>/returnLength} Item" state="Success"></ObjectStatus>
+						--><!--[+] end delete - STRY0015850 -->
+						<!-- [+] add - STRY0015850 -->
+							<ObjectStatus text="{i18n>retItems} {OrderListSet>/returnLength} {i18n>itemLabel}" state="Success"></ObjectStatus>
+						<!-- [+] end add - STRY0015850 -->
 							<!--<Button text="Expand All" press="onExpandReturn"></Button>-->
 						</OverflowToolbar>
 						<VBox class="sapUiSizeCompact" id="ID_VBOX_ORD_LIST" items="{OrderListSet>/items/returns}" visible="{oNewModel>/firstlist}">
 							<Panel expandable="true" class="sapUiSizeCompact">
+							<!-- [+] delete - STRY0015850	
 								<customData>
 									<core:CustomData key="blurItemLevel" value="{OrderListSet>Blur}" writeToDom="true"></core:CustomData>
-									<!--<core:CustomData key="blurItemLevel" value="{OrderListSet>Blur}" writeToDom="true"></core:CustomData>-->
 								</customData>
+							--><!-- end delete - STRY0015850 -->	
 								<headerToolbar>
 									<Toolbar>
 										<Label text="{path:'OrderListSet>ItemDesc',formatter:'.formatter.sameValueReturn'}" wrapping="true"></Label>
@@ -253,8 +269,16 @@
 									labelSpanS="4" emptySpanL="1" emptySpanM="1" emptySpanS="1" columnsL="2" columnsM="2">
 									<f:content>
 										<core:Title/>
+									<!-- [-] delete - STRY0015850	
 										<Label text="{OrderListSet>Currency}" design="Bold"/>
 										<Text text="{OrderListSet>UnitPrice}"/>
+									--> <!--[-] end delete - STRY0015850 -->
+									<!--[+] add - STRY0015850 -->
+										<Label text="{OrderListSet>Currency}" design="Bold" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>UnitPrice', formatter:'.formatter.addCommas'}" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+									<!--[+] add - STRY0015850 -->
 										<Label text="{i18n>SKUOrdList}" design="Bold"/>
 										<Text text="{OrderListSet>Material}"/>
 										<Label text="{i18n>UOMOrdList}" tooltip="{i18n>uomTooltip}" design="Bold"/>
@@ -264,6 +288,7 @@
 										<Label text="Status" design="Bold"/>
 										<Text text="{parts:['OrderListSet>ItemStatusDesc','OrderListSet>RejectionReasonDesc'],formatter:'.formatter.f4ValueBind'}"/>
 										<core:Title/>
+									<!-- [-] delete - STRY0015850	
 										<Label text="{i18n>grossOrdList}" design="Bold"/>
 										<Text text="{parts:['OrderListSet>GrossAmount','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
 										<Label text="{i18n>discountOrdList}" design="Bold"/>
@@ -279,27 +304,70 @@
 										<VBox items="{OrderListSet>action}">
 											<Text text="{OrderListSet>}"/>
 										</VBox>
+									--> <!--[-] end delete - STRY0015850 -->
+									<!--[+] add - STRY0015850 -->
+										<Label text="{i18n>grossOrdList}" design="Bold"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}"  />
+										<Text text="{path:'OrderListSet>GrossAmount', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Label text="{i18n>discountOrdList}" design="Bold" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>Discount', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Label text="{i18n>taxOrdList}" design="Bold" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>Tax', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Label text="{i18n>quantity}" design="Bold" />
+										<Text text="{OrderListSet>Quantity}" tooltip="{OrderListSet>Quantity}" />
+										<Label text="{i18n>cnAmount}" design="Bold"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>NetItemWorth', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Label text="{i18n>action}" design="Bold"/>
+										<VBox items="{OrderListSet>action}">
+											<Text text="{OrderListSet>}"/>
+										</VBox>	
+									<!--[+] end add - STRY0015850 -->
 									</f:content>
 								</f:SimpleForm>
 							</Panel>
 						</VBox>
 						<OverflowToolbar visible="{oNewModel>/secondlist}">
 							<HBox>
+							<!-- [-] delete - STRY0015850	
 								<Label text="Exchange Sub Total:"/>
 								<Label text="{parts:['OrderListSet>/exchangeTotal','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}" design="Bold"
 									visible="{path:'OrderListSet>/excBlur',formatter:'.formatter.blurNValue'}"></Label>
 								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'OrderListSet>/excBlur',formatter:'.formatter.blurValue'}"></Label>
+							--> <!-- [-] end delete - STRY0015850 -->
+							<!-- [+] add - STRY0015850 -->
+								<Label text="{i18n>excSubTotal}" visible="{path:'OrderListSet>/excBlur',formatter:'.formatter.hideBlur'}"/>
+								<Label text="{path:'OrderListSet>/exchangeTotal', formatter:'.formatter.addCommas'} 
+											{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}" design="Bold"
+									visible="{path:'OrderListSet>/excBlur', formatter:'.formatter.hideBlur'}"></Label>
+							<!-- [+] end add - STRY0015850 -->
 							</HBox>
 							<ToolbarSpacer></ToolbarSpacer>
-							<ObjectStatus text="Exchange Items: {OrderListSet>/exchangeLength} Item" state="Success"></ObjectStatus>
+							<!-- [-] delete - STRY0015850
+								<ObjectStatus text="Exchange Items: {OrderListSet>/exchangeLength} Item" state="Success"></ObjectStatus>
+							--><!-- end delete - STRY0015850 -->
+							<!--[+] add - STRY0015850 -->
+								<ObjectStatus text="{i18n>excItems} {OrderListSet>/exchangeLength} {i18n>itemLabel}" state="Success" />
+							<!--[+] end add - STRY0015850 -->
 							<!--<Button text="Expand All" press="onExpandExchange"></Button>-->
 						</OverflowToolbar>
 						<VBox class="sapUiSizeCompact" visible="{oNewModel>/secondlist}" items="{OrderListSet>/items/exchange}">
 							<Panel expandable="true" class="sapUiSizeCompact">
+								<!-- [-] delete - STRY0015850
 								<customData>
 									<core:CustomData key="blurItemLevel" value="{OrderListSet>Blur}" writeToDom="true"></core:CustomData>
-									<!--<core:CustomData key="blurItemLevel" value="Double Wear" writeToDom="true"></core:CustomData>-->
 								</customData>
+								--> <!-- end delete - STRY0015850 -->
 								<headerToolbar>
 									<Toolbar>
 										<Label text="{path:'OrderListSet>ItemDesc',formatter:'.formatter.sameValueReturn'}" wrapping="true"></Label>
@@ -309,8 +377,16 @@
 									labelSpanS="4" emptySpanL="1" emptySpanM="1" emptySpanS="1" columnsL="2" columnsM="2">
 									<f:content>
 										<core:Title/>
+									<!-- [-] delete - STRY001585	
 										<Label text="{OrderListSet>Currency}" design="Bold"/>
 										<Text text="{OrderListSet>UnitPrice}"/>
+									--> <!-- end delete - STRY0015850 -->
+									<!--[+] add - STRY001585 -->
+										<Label text="{OrderListSet>Currency}" design="Bold" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>UnitPrice', formatter:'.formatter.addCommas'}" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+									<!--[+] end add - STRY001585 -->
 										<Label text="{i18n>SKUOrdList}" design="Bold"/>
 										<Text text="{OrderListSet>Material}"/>
 										<Label text="{i18n>UOMOrdList}" tooltip="{i18n>uomTooltip}" design="Bold"/>
@@ -320,6 +396,7 @@
 										<Label text="Status" design="Bold"/>
 										<Text text="{parts:['OrderListSet>ItemStatusDesc','OrderListSet>RejectionReasonDesc'],formatter:'.formatter.f4ValueBind'}"/>
 										<core:Title/>
+									<!-- [-] delete - STRY0015850	
 										<Label text="{i18n>grossOrdList}" design="Bold"/>
 										<Text text="{parts:['OrderListSet>GrossAmount','OrderListSet>Currency'],formatter:'.formatter.f4ValueBind'}"/>
 										<Label text="{i18n>discountOrdList}" design="Bold"/>
@@ -334,6 +411,35 @@
 										<VBox items="{OrderListSet>action}">
 											<Text text="{OrderListSet>}"/>
 										</VBox>
+									--><!-- [-] end delete - STRY0015850 -->
+									<!--[+] add - STRY0015850 -->
+										<Label text="{i18n>grossOrdList}" design="Bold"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>GrossAmount', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Label text="{i18n>discountOrdList}" design="Bold"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>Discount', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Label text="{i18n>taxOrdList}" design="Bold" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>Tax', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />	
+										<Label text="{i18n>quantity}" design="Bold"/>
+										<Text text="{OrderListSet>Quantity}" tooltip="{OrderListSet>Quantity}"/>
+										<Label text="{i18n>amtAftrDeduc}" design="Bold" 
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Text text="{path:'OrderListSet>NetItemWorth', formatter:'.formatter.addCommas'} 
+													{path:'OrderListSet>/currency', formatter:'.formatter.adjCurr'}"
+											visible="{path:'OrderListSet>Blur', formatter:'.formatter.hideBlur'}" />
+										<Label text="{i18n>action}" design="Bold"/>
+										<VBox items="{OrderListSet>action}">
+											<Text text="{OrderListSet>}"/>
+										</VBox>
+									<!--[+] end add - STRY0015850 -->
 									</f:content>
 								</f:SimpleForm>
 							</Panel>
@@ -349,12 +455,22 @@
 							</items>
 						</SegmentedButton>
 						<OverflowToolbar visible="{oNewModel>/first}">
+						<!--[-] delete - STRY0015850 	
 							<HBox>
 								<Label text="Return Sub Total:"/>
 								<Label text="{parts:['summaryModel>/returns/OrderTotal','OrderListSet>/currency'],formatter:'.formatter.f4ValueBind'}" design="Bold"
 									visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"></Label>
 								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
 							</HBox>
+						--><!--[-] end delete - STRY0015850 -->
+						<!--[+] add - STRY0015850 -->
+							<HBox>
+								<Label text="{i18n>retSubTotLbl}" visible="{path:'summaryModel>/returns/Blur', formatter:'.formatter.hideBlur'}"  />
+								<Label text="{path:'summaryModel>/returns/OrderTotal', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/returns/Currency', formatter:'.formatter.adjCurr'}" design="Bold"
+									visible="{path:'summaryModel>/returns/Blur', formatter:'.formatter.hideBlur'}" />
+							</HBox>
+						<!--[+] end add - STRY0015850 -->
 						</OverflowToolbar>
 						<!--title="Return Sub Total:{summaryModel>/returns/OrderTotal} ({OrderListSet>/currency})"-->
 						<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="false" labelSpanL="5" class="summaryCls"
@@ -369,6 +485,7 @@
 								<!--[+] End Modification STRY0015013-->
 								<Label text="{i18n>paymentTermSumm}" design="Bold"/>
 								<Text text="{parts:['summaryModel>/returns/PaymentTermsDesc','summaryModel>/returns/PaymentTerms'],formatter:'.formatter.f4ValueBind'}"/>
+							<!--[-] delete - STRY0015850 
 								<Label text="{i18n>totalOrderQtySumm}" tooltip="{i18n>totalOrderQtyTooltip}" design="Bold"/>
 								<HBox>
 									<Text text="{summaryModel>/returns/TotOrdqty}" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
@@ -409,6 +526,38 @@
 										visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurNValue'}"/>
 									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.blurValue'}"></Label>
 								</HBox>
+							--> <!--[-] end delete - STRY0015850  -->
+							<!--[+] add - STRY0015850 -->
+								<Label text="{i18n>totalOrderQtySumm}" tooltip="{i18n>totalOrderQtyTooltip}" design="Bold"/>
+								<Text text="{summaryModel>/returns/TotOrdqty}" />
+								<Label text="{i18n>totalFOCQty}" tooltip="{i18n>totalFOCQtyTooltip}" design="Bold"/>
+								<Text text="{summaryModel>/returns/TotFocqty}" />
+								<Label text="{i18n>totalAmountSumm}" design="Bold" 
+									visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/returns/TotalAmount', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/returns/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.hideBlur'}" />
+								<Label text="{i18n>totalDiscountDiDoSumm}" design="Bold" 
+									visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/returns/TotDisc', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/returns/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.hideBlur'}"/>
+								<Label text="{i18n>cnAmt}" design="Bold"
+									visible="{path:'summaryModel>/returns/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/returns/CnAmount', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/returns/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/returns/Blur', formatter:'.formatter.hideBlur'}" />
+								<Label text="{i18n>taxAmountSumm}" design="Bold"
+									visible="{path:'summaryModel>/returns/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/returns/TaxAmount', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/returns/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/returns/Blur', formatter:'.formatter.hideBlur'}" />
+								<Label text="{i18n>orderTotalSumm}" design="Bold"
+									visible="{path:'summaryModel>/returns/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/returns/OrderTotal', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/returns/Currency', formatter:'.formatter.adjCurr'}"
+										visible="{path:'summaryModel>/returns/Blur',formatter:'.formatter.hideBlur'}" />	
+							<!--[+] add - STRY0015850  -->
 								<core:Title/>
 								<Label text="{i18n>remarksSumm}" design="Bold">
 									<layoutData>
@@ -425,12 +574,22 @@
 							</f:content>
 						</f:SimpleForm>
 						<OverflowToolbar visible="{oNewModel>/second}" class="sapUiMediumMarginTop">
+						<!--[-] delete - STRY0015850	
 							<HBox>
 								<Label text="Exchange Sub Total:"/>
 								<Label text="{parts:['summaryModel>/exchange/OrderTotal','OrderListSet>/currency'],formatter:'.formatter.f4EValueBind'}" design="Bold"
 									visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"></Label>
 								<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
 							</HBox>
+						--><!--[-] end delete - STRY0015850 -->
+						<!--[+] add - STRY0015850 -->
+							<HBox>
+								<Label text="{i18n>exSubTot}" visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Label text="{path:'summaryModel>/exchange/OrderTotal', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/exchange/Currency', formatter:'.formatter.adjCurr'}" design="Bold"
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+							</HBox>
+						<!--[+] end add - STRY0015850 -->
 						</OverflowToolbar>
 						<!--title="Exchange Sub Total:{summaryModel>/exchange/OrderTotal} ({OrderListSet>/currency})"-->
 						<f:SimpleForm minWidth="1024" layout="ResponsiveGridLayout" maxContainerCols="2" editable="false" labelSpanL="5" class="summaryCls"
@@ -441,6 +600,7 @@
 								<Text text="{summaryModel>/exchange/CustomerPoNumber}"/>
 								<Label text="{i18n>paymentTermSumm}" design="Bold"/>
 								<Text text="{parts:['summaryModel>/exchange/PaymentTermsDesc','summaryModel>/exchange/PaymentTerms'],formatter:'.formatter.f4EValueBind'}"/>
+							<!--[-] delete - STRY0015850
 								<Label text="{i18n>totalOrderQtySumm}" tooltip="{i18n>totalOrderQtyTooltip}" design="Bold"/>
 								<HBox>
 									<Text text="{summaryModel>/exchange/TotOrdqty}" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
@@ -481,6 +641,38 @@
 										visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurNValue'}"/>
 									<Label text="1234.56(789)" design="Bold" class="blurText" visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.blurValue'}"></Label>
 								</HBox>
+							--><!--[-] end delete - STRY0015850 -->
+							<!--[+] add - STRY0015850 -->
+								<Label text="{i18n>totalOrderQtySumm}" tooltip="{i18n>totalOrderQtyTooltip}" design="Bold" />
+								<Text text="{summaryModel>/exchange/TotOrdqty}" />
+								<Label text="{i18n>totalFOCQty}" tooltip="{i18n>totalFOCQtyTooltip}" design="Bold" />
+								<Text text="{summaryModel>/exchange/TotFocqty}" />
+								<Label text="{i18n>totalAmountSumm}" design="Bold" 
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/exchange/TotalAmount', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/exchange/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Label text="{i18n>totalDiscountDiDoSumm}" design="Bold" 
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/exchange/TotDisc', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/exchange/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/exchange/Blur',formatter:'.formatter.hideBlur'}" />
+								<Label text="{i18n>netAmountSumm}" design="Bold" 
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/exchange/NetAmount', formatter:'.formatter.addCommas'} 
+											{path:'summaryModel>/exchange/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Label text="{i18n>taxAmountSumm}" design="Bold"
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/exchange/TaxAmount', formatter:'.formatter.addCommas'}
+											{path:'summaryModel>/exchange/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />	
+								<Label text="{i18n>orderTotalSumm}" design="Bold"
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+								<Text text="{path:'summaryModel>/exchange/OrderTotal', formatter:'.formatter.addCommas'}
+									{path:'summaryModel>/exchange/Currency', formatter:'.formatter.adjCurr'}"
+									visible="{path:'summaryModel>/exchange/Blur', formatter:'.formatter.hideBlur'}" />
+							<!--[+] end add - STRY0015850 -->
 								<core:Title/>
 								<Label text="{i18n>remarksSumm}" design="Bold">
 									<layoutData>

@@ -31,7 +31,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						var a = t.getData().results;
 						if (a.length === 1) {
 							var s = this.getView().byId("ID_MASTER_LIST");
-							s.getItems()[0].setSelected(false)
+							s.getItems()[0].setSelected(false);
 						}
 					}
 				}
@@ -50,14 +50,14 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					t.getView().setModel(i, "userapi");
 					e = t.getView().getModel("userapi").getData().name;
 					t.userID = e;
-					t.getLoggedInUserName(e)
+					t.getLoggedInUserName(e);
 				},
 				error: function (e) {
-					sap.m.MessageBox.error("Could not retrieve logged in user details")
+					sap.m.MessageBox.error("Could not retrieve logged in user details");
 				},
 				complete: function (e) {}
 			});
-			return e
+			return e;
 		},
 		getLoggedInUserName: function (e) {
 			// Start: STRY0014353 - Incident: Track Return Order (data access)
@@ -83,7 +83,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					// if(oData.ATR03)	oModel.Division = oData.ATR02;
 					this.readMasterListData(o, "");
 				}
-			}.bind(this)).catch(function (oErr) {});
+			}.bind(this)).catch(function (oErr) { });
 			// var t = this;
 			// var a = new sap.ui.model.json.JSONModel;
 			// t.getView().setModel(a, "oLoggedInUserDetailModel");
@@ -143,44 +143,44 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				var i = "/masterDetailsSet";
 				if (s.salesOrgDataAccess && s.salesOrgDataAccess != "No Access" && s.salesOrgDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and SalesOrgDac eq '" + s.salesOrgDataAccess + "'"
+						e = e + " and SalesOrgDac eq '" + s.salesOrgDataAccess + "'";
 					} else {
-						e = "SalesOrgDac eq '" + s.salesOrgDataAccess + "'"
+						e = "SalesOrgDac eq '" + s.salesOrgDataAccess + "'";
 					}
 				}
 				if (s.custCodeDataAccess && s.custCodeDataAccess !== "No Access" && s.custCodeDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and CustomerCodeDac eq '" + s.custCodeDataAccess + "'"
+						e = e + " and CustomerCodeDac eq '" + s.custCodeDataAccess + "'";
 					} else {
-						e = "CustomerCodeDac eq '" + s.custCodeDataAccess + "'"
+						e = "CustomerCodeDac eq '" + s.custCodeDataAccess + "'";
 					}
 				}
 				if (s.distrChannelDataAccess && s.distrChannelDataAccess !== "No Access" && s.distrChannelDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and DistChannelDac eq '" + s.distrChannelDataAccess + "'"
+						e = e + " and DistChannelDac eq '" + s.distrChannelDataAccess + "'";
 					} else {
-						e = "DistChannelDac eq '" + s.distrChannelDataAccess + "'"
+						e = "DistChannelDac eq '" + s.distrChannelDataAccess + "'";
 					}
 				}
 				if (s.divisionDataAccess && s.divisionDataAccess !== "No Access" && s.divisionDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and DivisionDac eq '" + s.divisionDataAccess + "'"
+						e = e + " and DivisionDac eq '" + s.divisionDataAccess + "'";
 					} else {
-						e = "DivisionDac eq '" + s.divisionDataAccess + "'"
+						e = "DivisionDac eq '" + s.divisionDataAccess + "'";
 					}
 				}
 				if (s.materialGroupDataAccess && s.materialGroupDataAccess !== "No Access" && s.materialGroupDataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and MaterialGroupDac eq '" + s.materialGroupDataAccess + "'"
+						e = e + " and MaterialGroupDac eq '" + s.materialGroupDataAccess + "'";
 					} else {
-						e = "MaterialGroupDac eq '" + s.materialGroupDataAccess + "'"
+						e = "MaterialGroupDac eq '" + s.materialGroupDataAccess + "'";
 					}
 				}
 				if (s.materialGroup4DataAccess && s.materialGroup4DataAccess !== "No Access" && s.materialGroup4DataAccess !== "*") {
 					if (e !== "") {
-						e = e + " and MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'"
+						e = e + " and MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'";
 					} else {
-						e = "MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'"
+						e = "MaterialGroup4Dac eq '" + s.materialGroup4DataAccess + "'";
 					}
 				}
 				if (e) i = i + "?$filter=" + e;
@@ -195,11 +195,11 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 							var n = e.results[r].CreationTime.split("PT")[1].split("H")[1].split("M")[0];
 							var l = e.results[r].CreationTime.split("PT")[1].split("H")[1].split("M")[1].split("S")[0];
 							if (i !== null) {
-								e.results[r].CreatedDateTime = new Date(i[0], i[1], i[2], o, n, l)
+								e.results[r].CreatedDateTime = new Date(i[0], i[1], i[2], o, n, l);
 							} else {
-								e.results[r].CreatedDateTime = null
+								e.results[r].CreatedDateTime = null;
 							}
-							e.results[r].CreatedDateTime = u.dateTimeFormat(e.results[r].CreatedDateTime)
+							e.results[r].CreatedDateTime = u.dateTimeFormat(e.results[r].CreatedDateTime);
 						}
 						var c = new sap.ui.model.json.JSONModel({
 							results: e.results
@@ -208,23 +208,23 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 						if (e.results.length === 0 && !sap.ui.Device.system.phone) {
 							var d = sap.ui.core.UIComponent.getRouterFor(s);
 							d.navTo("notFound", true);
-							return
+							return;
 						}
 						var m = s.getView().byId("ID_MASTER_LIST").getBinding("items");
 						var D = s.i18nModel.getProperty("trackingDetailsMastPageTitle");
 						s.getView().byId("ID_MAST_PAGE").setTitle(D + " (" + m.getLength() + ")");
 						s.getView().byId("ID_MAST_PAGE").addStyleClass("title sapMIBar-CTX sapMTitle");
 						if (s.searchMasterFrag) s.searchMasterFrag.close();
-						if (!sap.ui.Device.system.phone) s.handleFirstItemSetSelected()
+						if (!sap.ui.Device.system.phone) s.handleFirstItemSetSelected();
 					},
 					error: function (e) {
 						a.close();
 						var t = "";
 						if (e.statusCode === 504) {
 							t = "Request timed-out. Please try again!";
-							s.errorMsg(t)
+							s.errorMsg(t);
 						} else {
-							s.errorMsg("Data Not Found")
+							s.errorMsg("Data Not Found");
 						}
 					}
 				});
@@ -249,7 +249,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var s = sap.ui.core.UIComponent.getRouterFor(this);
 			s.navTo("object", {
 				contextPath: a.ReturnOrderNumber
-			}, true)
+			}, true);
 		},
 		handleItemPressed: function (e) {
 			var t = e.getParameter("listItem").getBindingContext("masterDataModel").getObject();
@@ -259,7 +259,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var a = sap.ui.core.UIComponent.getRouterFor(this);
 			a.navTo("object", {
 				contextPath: t.ReturnOrderNumber
-			}, true)
+			}, true);
 		},
 		fnGetStatus: function () {
 			var e = this;
@@ -272,20 +272,20 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					var s = new sap.ui.model.json.JSONModel({
 						results: t.results
 					});
-					e.getView().setModel(s, "FilterModel")
+					e.getView().setModel(s, "FilterModel");
 				},
 				error: function (t) {
 					var a = "";
 					if (t.statusCode === 504) {
 						a = "Request timed-out. Please try again!";
-						e.errorMsg(a)
+						e.errorMsg(a);
 					} else {
 						a = JSON.parse(t.responseText);
 						a = a.error.message.value;
-						e.errorMsg(a)
+						e.errorMsg(a);
 					}
 				}
-			})
+			});
 		},
 		onSearchMasterList: function (e) {
 			var t = this;
@@ -301,7 +301,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				var r = JSON.stringify(s);
 				this.tempDataFragment = JSON.parse(r);
 				var i = "CreationDate le datetime'" + s.StartDate + "' and CreationDate ge datetime'" + s.EndDate + "'";
-				this.readMasterListData(i, "")
+				this.readMasterListData(i, "");
 			} else {
 				var o = e.getParameters().query;
 				var n = [];
@@ -410,7 +410,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			var r = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate()));
 			var i = u.DateConversion(new Date(s.getFullYear(), s.getMonth(), s.getDate() - 7));
 			var o = "CreationDate le datetime'" + r + "' and CreationDate ge datetime'" + i + "'";
-			this.readMasterListData(o, "")
+			this.readMasterListData(o, "");
 		},
 		handleOkReadSoFilter: function () {
 			// debugger;
@@ -430,28 +430,28 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			//var t = new sap.ui.model.json.JSONModel(j);
 			//this.searchMasterFrag.setModel(t);
 			if (t.returnOrder && t.returnOrder.trim() !== "") {
-				e = "ReturnOrderNumber eq '" + t.returnOrder + "'"
+				e = "ReturnOrderNumber eq '" + t.returnOrder + "'";
 			}
 			if (t.CustomerNo && t.CustomerNo.trim() !== "") {
 				if (e !== "") {
-					e = e + " and CustomerCode eq '" + t.CustomerNo + "'"
+					e = e + " and CustomerCode eq '" + t.CustomerNo + "'";
 				} else {
-					e = "CustomerCode eq '" + t.CustomerNo + "'"
+					e = "CustomerCode eq '" + t.CustomerNo + "'";
 				}
 			}
 			if (t.CustomerName && t.CustomerName.trim() !== "") {
 				if (e !== "") {
-					e = e + " and CustomerName eq '" + t.CustomerName + "'"
+					e = e + " and CustomerName eq '" + t.CustomerName + "'";
 				} else {
-					e = "CustomerName eq '" + t.CustomerName + "'"
+					e = "CustomerName eq '" + t.CustomerName + "'";
 				}
 			}
 			// [+] Start modification - STRY0015013
 			if (t.Bname && t.Bname.trim() !== "") {
 				if (e !== "") {
-					e = e + " and Bname eq '" + t.Bname + "'"
+					e = e + " and Bname eq '" + t.Bname + "'";
 				} else {
-					e = "Bname eq '" + t.Bname + "'"
+					e = "Bname eq '" + t.Bname + "'";
 				}
 				// force creation date
 				if (t.StartDate === "" || t.StartDate === null) {
@@ -477,9 +477,9 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 
 			if (t.RefInvoice && t.RefInvoice.trim() !== "") {
 				if (e !== "") {
-					e = e + " and RefInvoice eq '" + t.RefInvoice + "'"
+					e = e + " and RefInvoice eq '" + t.RefInvoice + "'";
 				} else {
-					e = "RefInvoice eq '" + t.RefInvoice + "'"
+					e = "RefInvoice eq '" + t.RefInvoice + "'";
 				}
 				//Start-Invoice Filter Enhancement
 				if (!t.SalesOrg || !t.DistChan || !t.Division) {
@@ -516,18 +516,18 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			// [+] End modification - STRY0015013
 			if (t.CustomerPoNumber && t.CustomerPoNumber.trim() !== "") {
 				if (e !== "") {
-					e = e + " and CustomerPoNumber eq '" + t.CustomerPoNumber + "'"
+					e = e + " and CustomerPoNumber eq '" + t.CustomerPoNumber + "'";
 				} else {
-					e = "CustomerPoNumber eq '" + t.CustomerPoNumber + "'"
+					e = "CustomerPoNumber eq '" + t.CustomerPoNumber + "'";
 				}
 			}
 			if (t.StartDate && t.StartDate !== null) {
 				var a = u.DateConversion(t.StartDate);
 				var s = u.DateConversion(t.EndDate);
 				if (e !== "") {
-					e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					e = e + " and (CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')";
 				} else {
-					e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')"
+					e = "(CreationDate ge datetime'" + a + "' and CreationDate le datetime'" + s + "')";
 				}
 			}
 			if (t.SelStatus && t.SelStatus.length > 0) {
@@ -536,15 +536,15 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				if (e !== "") {
 					for (var o = 0; o < r.length; o++) {
 						if (o === r.length - 1) i = i + " HeaderStatus eq '" + r[o] + "'";
-						else i = i + " HeaderStatus eq '" + r[o] + "' or "
+						else i = i + " HeaderStatus eq '" + r[o] + "' or ";
 					}
-					e = e + " and (" + i + ")"
+					e = e + " and (" + i + ")";
 				} else {
 					for (var o = 0; o < r.length; o++) {
 						if (o === r.length - 1) i = i + " HeaderStatus eq '" + r[o] + "'";
-						else i = i + " HeaderStatus eq '" + r[o] + "' or "
+						else i = i + " HeaderStatus eq '" + r[o] + "' or ";
 					}
-					e = i
+					e = i;
 				}
 			}
 			if (e) this.readMasterListData(e, "F");
@@ -553,7 +553,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				var a = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate()));
 				var s = u.DateConversion(new Date(n.getFullYear(), n.getMonth(), n.getDate() - 7));
 				var l = "CreationDate le datetime'" + a + "' and CreationDate ge datetime'" + s + "'";
-				this.readMasterListData(l, "")
+				this.readMasterListData(l, "");
 			}
 		},
 		handleCancelMasterSearch: function () {
@@ -561,15 +561,15 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			this.tempDataFragment.EndDate = this.tempDataFragment.EndDate ? new Date(this.tempDataFragment.EndDate) : null;
 			var e = new sap.ui.model.json.JSONModel(this.tempDataFragment);
 			this.searchMasterFrag.setModel(e);
-			this.searchMasterFrag.close()
+			this.searchMasterFrag.close();
 		},
 		onAfterRendering: function () {
 			this.i18nModel = this.getView().getModel("i18n");
-			this.oModel = this.getView().getModel("TrackingODataModel")
+			this.oModel = this.getView().getModel("TrackingODataModel");
 		},
 		onLiveChangeSalesOrderFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 
 		onLiveChangeRefInvoiceFilter: function (e) {
@@ -579,20 +579,20 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 			uiStateModel.setData(uiStateData);
 
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 
 		onLiveChangeCustIdFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 		onLiveChangeSalesOrgFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 		onLiveChangeDistChanFilter: function (e) {
 			e.getSource().setValue(e.getParameters().value.trim());
-			e.getSource().setTooltip(e.getParameters().value.trim())
+			e.getSource().setTooltip(e.getParameters().value.trim());
 		},
 		handleBack: function () {
 			var e = sap.ushell.Container.getService("CrossApplicationNavigation");
@@ -601,7 +601,7 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 					semanticObject: "",
 					action: ""
 				}
-			})
+			});
 		},
 		onChangeDateRange: function (e) {
 			if (!e.mParameters.valid) {
@@ -611,8 +611,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel", "sap/ui/core/r
 				this.searchMasterFrag.getModel().refresh();
 				e.getSource().setValue("");
 				var a = this.i18nModel.getProperty("enterValidDateRange");
-				sap.m.MessageToast.show(a)
+				sap.m.MessageToast.show(a);
 			}
 		}
-	})
+	});
 });

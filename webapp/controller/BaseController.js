@@ -2,25 +2,25 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/ui/core/routing/History"], fun
 	"use strict";
 	return e.extend("dksh.connectclient.TrackReturnOrder.controller.BaseController", {
 		getRouter: function () {
-			return this.getOwnerComponent().getRouter()
+			return this.getOwnerComponent().getRouter();
 		},
 		getModel: function (e) {
-			return this.getView().getModel(e)
+			return this.getView().getModel(e);
 		},
 		setModel: function (e, t) {
-			return this.getView().setModel(e, t)
+			return this.getView().setModel(e, t);
 		},
 		getResourceBundle: function () {
-			return this.getOwnerComponent().getModel("i18n").getResourceBundle()
+			return this.getOwnerComponent().getModel("i18n").getResourceBundle();
 		},
 		onNavBack: function () {
 			var e = t.getInstance().getPreviousHash(),
 				n = sap.ushell.Container.getService("CrossApplicationNavigation");
 			if (e !== undefined || !n.isInitialNavigation()) {
-				history.go(-1)
+				history.go(-1);
 			} else {
-				this.getRouter().navTo("master", {}, true)
+				this.getRouter().navTo("master", {}, true);
 			}
 		}
-	})
+	});
 });

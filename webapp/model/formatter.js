@@ -179,6 +179,9 @@ sap.ui.define([], function () {
 				var i = r.substring(r.length - 3);
 				var s = r.substring(0, r.length - 3);
 				if (s != "") i = "," + i;
+			//[+] add - STRY00158
+				n = n.substring(0, 3);
+			//[+] end add - STRY00158				
 				var u = s.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + i + n;
 				if (t != "") return u + " (" + t + ")";
 				else if (t == "" || t == undefined) return u;
@@ -455,9 +458,25 @@ sap.ui.define([], function () {
 			if (e == "B") return true;
 			return false;
 		},
-		blurNValue: function (e) {
-			if (e != "B") return true;
-			return false;
-		}
+	// [+] delete - STRY0015850	
+	//	blurNValue: function (e) {
+	//		if (e != "B") return true;
+	//		return false;
+	//	}
+	// [+] end delete - STRY0015850
+	// [+] add - STRY0015850
+		// hide blur
+		hideBlur: function(e){
+			var bool = e === "B" ? false : true;
+			return bool;
+		},
+		// adjust currency display
+		adjCurr: function(c){
+			var v;
+			if ( c === undefined || c === null ) {v = "";}
+			else {v = "(" + c + ")";}
+			return v;
+		}		
+	// [+] end add - STRY0015850
 	};
 });

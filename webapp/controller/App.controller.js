@@ -17,8 +17,8 @@ sap.ui.define(["./BaseController", "sap/ui/model/json/JSONModel"], function (e, 
 			this.setModel(e, "appView");
 			n = function () {
 				e.setProperty("/busy", false);
-				e.setProperty("/delay", o)
-			}
+				e.setProperty("/delay", o);
+			};
 		}
-	})
+	});
 });
